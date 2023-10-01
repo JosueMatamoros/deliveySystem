@@ -19,7 +19,9 @@ public class Address {
 
     // Getters
     public String getCompleteAddress(){
-        return this.province + ", " + this.district + ", " + this.canton + ", " + this.exactAddress + " ( " + this.description + " )";
+        return this.province + ", " + this.canton + ", " + this.district + ", " + this.exactAddress + " ( " + this.description + " )";
     }
+
+
 
 }

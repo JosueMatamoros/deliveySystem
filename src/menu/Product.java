@@ -1,5 +1,7 @@
 package menu;
 
+import javax.swing.*;
+
 public class Product {
     // Attributes
     private String name;
@@ -42,4 +44,6 @@ public class Product {
     public void setPrice(double price){
         this.price = price;
     }
+
 }
+

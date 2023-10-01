@@ -33,4 +33,5 @@ public class Menu {
     public void removeDiscount(Discounts discount){
         this.discounts.remove(discount);
     }
+
 }
