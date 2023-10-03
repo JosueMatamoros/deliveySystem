@@ -6,6 +6,7 @@ import person.aggregated.Address;
 
 import java.sql.Date;
 import java.sql.Time;
+import java.time.LocalTime;
 import java.util.ArrayList;
 
 public class Orders {
@@ -15,7 +16,7 @@ public class Orders {
     private Date date;
     private Time totalTime;
     private String tableNumber;
-    private Time pickUpTime;
+    private LocalTime pickUpTime;
     private String state;
     private Employee employee;
     private Address address;
@@ -25,31 +26,27 @@ public class Orders {
     static int orderCount = 199;
 
     // Constructors
-    public Orders(ArrayList<OrderProducts> order, String tableNumber, Employee employee ){
+    public Orders(ArrayList<OrderProducts> order){
        // Constructor for orders in the restaurant
         this.order = order;
-        this.tableNumber = tableNumber;
-        this.employee = employee;
         this.state = "In the kitchen";
         this.orderNumber = ++orderCount;
         this.date = new Date(System.currentTimeMillis());
     }
-    public Orders(ArrayList<OrderProducts> order, Time pickUpTime, Employee employee){
+    public Orders(ArrayList<OrderProducts> order, LocalTime pickUpTime){
         // Constructor for orders to go
         this.order = order;
         this.pickUpTime = pickUpTime;
-        this.employee = employee;
         this.state = "In the kitchen";
         this.orderNumber = ++orderCount;
         this.date = new Date(System.currentTimeMillis());
     }
 
-    public Orders(ArrayList<OrderProducts> order, Address address, Employee employee, Client client){
+    public Orders(ArrayList<OrderProducts> order, Address address, Client client){
         // Constructor for orders to deliver
         this.order = order;
         this.address = address;
         this.client = client;
-        this.employee = employee;
         this.state = "In the kitchen";
         this.orderNumber = ++orderCount;
         this.date = new Date(System.currentTimeMillis());
@@ -70,7 +67,7 @@ public class Orders {
     public String getTableNumber(){
         return this.tableNumber;
     }
-    public Time getPickUpTime(){
+    public LocalTime getPickUpTime(){
         return this.pickUpTime;
     }
     public String getState(){
@@ -98,5 +95,22 @@ public class Orders {
     }
     public void removeOrder(OrderProducts order){
         this.order.remove(order);
+    }
+
+    @Override
+    public String toString() {
+        return "Orders{" +
+                "order=" + order +
+                ", total=" + total +
+                ", date=" + date +
+                ", totalTime=" + totalTime +
+                ", tableNumber='" + tableNumber + '\'' +
+                ", pickUpTime=" + pickUpTime +
+                ", state='" + state + '\'' +
+                ", employee=" + employee +
+                ", address=" + address +
+                ", client=" + client +
+                ", orderNumber=" + orderNumber +
+                '}';
     }
 }

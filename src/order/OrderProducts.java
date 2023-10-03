@@ -1,8 +1,10 @@
 package order;
 
+import java.io.Serializable;
+
 import menu.Product;
 
-public class OrderProducts {
+public class OrderProducts implements Serializable {
     // Attributes
     private Product product;
     private int quantity;
@@ -35,5 +37,15 @@ public class OrderProducts {
     }
     public void setQuantity(int quantity){
         this.quantity = quantity;
+    }
+
+    @Override
+    public String toString() {
+        return "OrderProducts{" +
+                "product=" + product +
+                ", quantity=" + quantity +
+                ", subtotal=" + subtotal +
+                ", state=" + state +
+                '}';
     }
 }

@@ -1,8 +1,10 @@
 package menu;
 
+import java.io.Serializable;
+
 import javax.swing.*;
 
-public class Product {
+public class Product implements Serializable {
     // Attributes
     private String name;
     private String description;
@@ -43,6 +45,17 @@ public class Product {
     }
     public void setPrice(double price){
         this.price = price;
+    }
+
+    @Override
+    public String toString() {
+        return "Product: " +
+                "name:'" + name + '\'' +
+                ", description:'" + description + '\'' +
+                ", price:" + price +
+                ", category:'" + category + '\'' +
+                ", preparationTime:" + preparationTime +
+                '}';
     }
 
 }

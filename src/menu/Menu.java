@@ -1,8 +1,9 @@
 package menu;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Menu {
+public class Menu implements Serializable {
     // Atributes
     private ArrayList<Product> products = new ArrayList<Product>();
     private ArrayList<Discounts> discounts = new ArrayList<Discounts>();
