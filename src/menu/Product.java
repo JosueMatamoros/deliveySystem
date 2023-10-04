@@ -33,6 +33,7 @@ public class Product implements Serializable {
     public String getCategory(){
         return this.category;
     }
+
     public double getPreparationTime(){
         return this.preparationTime;
     }

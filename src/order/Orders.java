@@ -1,5 +1,7 @@
 package order;
 
+import menu.Discounts;
+import menu.Menu;
 import person.Client;
 import person.Employee;
 import person.aggregated.Address;
@@ -15,7 +17,7 @@ public class Orders {
     private int total;
     private Date date;
     private Time totalTime;
-    private String tableNumber;
+    private int tableNumber;
     private LocalTime pickUpTime;
     private String state;
     private Employee employee;
@@ -29,15 +31,16 @@ public class Orders {
     public Orders(ArrayList<OrderProducts> order){
        // Constructor for orders in the restaurant
         this.order = order;
-        this.state = "In the kitchen";
+        this.state = "New order";
         this.orderNumber = ++orderCount;
         this.date = new Date(System.currentTimeMillis());
+        this.total = 0;
     }
     public Orders(ArrayList<OrderProducts> order, LocalTime pickUpTime){
         // Constructor for orders to go
         this.order = order;
         this.pickUpTime = pickUpTime;
-        this.state = "In the kitchen";
+        this.state = "New order";
         this.orderNumber = ++orderCount;
         this.date = new Date(System.currentTimeMillis());
     }
@@ -47,7 +50,7 @@ public class Orders {
         this.order = order;
         this.address = address;
         this.client = client;
-        this.state = "In the kitchen";
+        this.state = "New order";
         this.orderNumber = ++orderCount;
         this.date = new Date(System.currentTimeMillis());
     }
@@ -64,7 +67,7 @@ public class Orders {
     public Time getTotalTime(){
         return this.totalTime;
     }
-    public String getTableNumber(){
+    public int getTableNumber(){
         return this.tableNumber;
     }
     public LocalTime getPickUpTime(){
@@ -89,6 +92,9 @@ public class Orders {
     public void setState(String state){
         this.state = state;
     }
+    public void setTableNumber(int tableNumber){
+        this.tableNumber = tableNumber;
+    }
     // Methods
     public void appendOrder(OrderProducts order){
         this.order.add(order);
@@ -98,28 +104,51 @@ public class Orders {
     }
 
     @Override
-public String toString() {
-    StringBuilder sb = new StringBuilder();
-    sb.append("Order Information:\n");
-    sb.append("  Order Number: ").append(orderNumber).append("\n");
-    sb.append("  Table Number: ").append(tableNumber).append("\n");
-    sb.append("  Date: ").append(date).append("\n");
-    sb.append("  Pick-up Time: ").append(pickUpTime).append("\n");
-    sb.append("  State: ").append(state).append("\n");
-    sb.append("  Total: $").append(total).append("\n");
-    sb.append("  Total Time: ").append(totalTime).append(" minutes\n");
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Order Information:\n");
+        sb.append("  Order Number: ").append(orderNumber).append("\n");
+        sb.append("  Table Number: ").append(tableNumber).append("\n");
+        sb.append("  Date: ").append(date).append("\n");
+        sb.append("  Pick-up Time: ").append(pickUpTime).append("\n");
+        sb.append("  State: ").append(state).append("\n");
+        sb.append("  Total: $").append(total).append("\n");
+        sb.append("  Total Time: ").append(totalTime).append(" minutes\n");
 
-    sb.append("  Employee: ").append(employee).append("\n");
-    sb.append("  Client: ").append(client).append("\n");
+        sb.append("  Employee: ").append(employee).append("\n");
+        sb.append("  Client: ").append(client).append("\n");
 
-    sb.append("  Address: ").append(address).append("\n");
+        sb.append("  Address: ").append(address).append("\n");
 
-    sb.append("  Order Items:\n");
-    for (OrderProducts item : order) {
-        sb.append("    - ").append(item).append("\n");
+        sb.append("  Order Items:\n");
+        for (OrderProducts item : order) {
+            sb.append("    - ").append(item).append("\n");
+        }
+
+        return sb.toString();
     }
 
-    return sb.toString();
-}
+    public String toStringRestaurant(){
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("Order Information:\n");
+        sb.append("  Order Number: ").append(orderNumber).append("\n");
+        sb.append("  Table Number: ").append(tableNumber).append("\n");
+        sb.append("  Date: ").append(date).append("\n");
+        sb.append("  State: ").append(state).append("\n");
+        sb.append("  Total: $").append(total).append("\n");
+        sb.append("  Total Time: ").append(totalTime).append(" minutes\n");
+
+        sb.append("  Employee: ").append(employee).append("\n");
+        sb.append("  Client: ").append(client).append("\n");
+
+        sb.append("  Order Items:\n");
+        for (OrderProducts item : order) {
+            sb.append("    - ").append(item).append("\n");
+        }
+
+        return sb.toString();
+    }
+
 
 }

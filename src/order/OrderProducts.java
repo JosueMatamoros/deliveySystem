@@ -32,6 +32,7 @@ public class OrderProducts implements Serializable {
     public Boolean getState(){
         return this.state;
     }
+
     public void setState(Boolean state){
         this.state = state;
     }
@@ -41,13 +42,14 @@ public class OrderProducts implements Serializable {
 
     @Override
     public String toString() {
-        return "Selected Product: " + product.getName() +
-               "\nDescription: " + product.getDescription() +
-               "\nPrice: $" + product.getPrice() +
-               "\nCategory: " + product.getCategory() +
-               "\nQuantity: " + quantity +
-               "\nSubtotal: $" + (product.getPrice() * quantity) +
-               "\nState: " + (state ? "true" : "false") +
-               "\n";
+        StringBuilder sb = new StringBuilder();
+        sb.append("Product: ").append(this.product.getName()).append("\n");
+        sb.append("  Description: ").append(this.product.getDescription()).append("\n");
+        sb.append("  Category: ").append(this.product.getCategory()).append("\n");
+        sb.append("  Price: $").append(this.product.getPrice()).append("\n");
+        sb.append("  Quantity: ").append(this.quantity).append("\n");
+        sb.append("  Subtotal: $").append(this.subtotal).append("\n");
+        sb.append("  State: ").append(this.state).append("\n");
+        return sb.toString();
     }
 }

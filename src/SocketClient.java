@@ -34,7 +34,7 @@ public class SocketClient {
             System.out.println("Products:");
             int i = 0;
             for (Product product : menu.getProducts()) {
-                System.out.println((i+1) + ". " + product);
+                System.out.println((++i) + ". " + product);
             }
 
             // Mostrar descuentos

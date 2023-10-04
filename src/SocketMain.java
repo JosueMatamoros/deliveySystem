@@ -7,6 +7,7 @@ import person.Client;
 import person.Employee;
 import person.aggregated.Address;
 
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -23,12 +24,16 @@ import java.util.Scanner;
 
 
 public class SocketMain {
+    // Restaurant tables
+    static int table = 0;
+
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
         // CREATING THE RESTAURANT SERVER, IS "MAIN" SERVER;
         int port = 12345;
         ServerSocket serverSocket = null;
+
 
         try {
             serverSocket = new ServerSocket(port);
@@ -93,6 +98,7 @@ public class SocketMain {
 
                     objectOutPut.writeObject(menu);
 
+                    // Receive the list of selected products from the client
                     ArrayList<OrderProducts> selectedProducts = (ArrayList<OrderProducts>) objectInput.readObject();
 
                     for (OrderProducts product : selectedProducts) {
@@ -102,13 +108,34 @@ public class SocketMain {
                     confirmation.println("Received successfully!");
 
                     boolean finish = false;
+                    ArrayList<Orders> orders = new ArrayList<>();
+
+                    // Add the orders to the list of orders
+                    ArrayList<OrderProducts> burnOrders = new ArrayList<>();
+                    ArrayList<OrderProducts> burnOrders1 = new ArrayList<>();
+                    OrderProducts order1 = new OrderProducts(productos[0], 1);
+                    OrderProducts order2 = new OrderProducts(productos[5], 1);
+                    OrderProducts order3 = new OrderProducts(productos[10], 1);
+                    OrderProducts order4 = new OrderProducts(productos[15], 1);
+
+                    // Order of the first client
+                    burnOrders.add(order1);
+                    burnOrders.add(order2);
+                    // Order of the second client
+                    burnOrders1.add(order3);
+                    burnOrders1.add(order4);
+
+                    // Add the orders to the list of orders
+                    orders.add(new Orders(burnOrders));
+                    orders.add(new Orders(burnOrders1));
+
                     do {
                         // Send a message to the client
                         confirmation.println("1. Dine-in 2. Takeout 3. Express Service 4. Exit Option: ");
 
                         // Read the client's response
                         String clientResponse = inputBuffer.readLine();
-                        ArrayList<Orders> orders = new ArrayList<>();
+
 
                         if (clientResponse != null && !clientResponse.isEmpty()) {
                             try {
@@ -263,6 +290,9 @@ public class SocketMain {
                     ArrayList<Client> clients = new ArrayList<>();
                     clients.add(new Client("Kenny Rofrigues","+506 7296 8552", "Male", (byte)21, addresses));
                     clients.add(new Client("Asdrubal Ulate", "+506 8850 9804","Male", (byte)21, addresses1));
+
+
+
 
                 int opcion = 0;
                 do {
@@ -578,7 +608,76 @@ public class SocketMain {
                                 }while (opcion != 5);
                                 break;
                             case 4:
-                                // Implementar administracion de ordenes
+                                do {
+                                    System.out.println("1. Show Orders");
+                                    System.out.println("2. Star Order");
+                                    System.out.println("3. Finish Order");
+                                    System.out.println("4. Exit");
+                                    try {
+                                        opcion = scanner.nextInt();
+                                        switch (opcion){
+                                            case 1:
+                                                System.out.println("Orders");
+                                                for (Orders order : orders) {
+                                                    if (order.getAddress() != null || order.getClient() != null){
+                                                        // Order to deliver
+
+                                                    } else if (order.getPickUpTime() != null){
+                                                        // Order to go
+
+                                                    } else {
+                                                        // Order in the restaurant
+                                                        System.out.println(order.toStringRestaurant());
+
+                                                    }
+
+                                                }
+                                                break;
+                                            case 2:
+
+                                                System.out.println("Orders");
+                                                for (Orders order : orders) {
+                                                    System.out.println(order.getOrderNumber());
+                                                    for (OrderProducts orderProducts : order.getOrder()) {
+                                                        System.out.println(orderProducts.toString());
+                                                    }
+                                                }
+                                                System.out.println("Select the order to start");
+                                                int orderNumber = scanner.nextInt();
+                                                // Search the order
+                                                boolean orderFound = false;
+                                                for (Orders order : orders) {
+                                                    if (order.getOrderNumber() == orderNumber){
+                                                        order.setState("In process");
+                                                        order.setTableNumber(++table);
+                                                        // continuar codigo
+
+                                                        System.out.println("Order started");
+                                                        orderFound = true;
+                                                        break;
+                                                    }
+
+                                                }
+                                                if (!orderFound){
+                                                    System.out.println("Order not found");
+                                                }
+
+
+                                                break;
+                                            case 3:
+
+                                                break;
+                                            case 4:
+                                                break;
+                                            default:
+                                                System.out.println("Invalid option");
+                                                break;
+                                        }
+                                    } catch (Exception e) {
+                                        System.out.println("Invalid option");
+                                        scanner.nextLine();
+                                    }
+                                }while (opcion != 4);
                                 break;
                             case 5:
                                 break;

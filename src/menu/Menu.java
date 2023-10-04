@@ -47,7 +47,6 @@ public class Menu implements Serializable {
             menuText.append("  Price: $").append(product.getPrice()).append("\n");
             i++;
         }
-
         for (Discounts discount : discounts) {
             menuText.append("Discount: ").append(discount.getDiscount());
         }
