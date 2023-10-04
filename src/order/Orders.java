@@ -153,5 +153,24 @@ public class Orders {
         return sb.toString();
     }
 
+    public String toStringClient() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Order Information:\n");
+        sb.append("  Order Number: ").append(orderNumber).append("\n");
+        sb.append("  Table Number: ").append(tableNumber).append("\n");
+        sb.append("  Date: ").append(date).append("\n");
+        sb.append("  Total: $").append(total).append("\n");
+        sb.append("  Total Time: ").append(totalTime).append(" minutes\n");
+
+        sb.append("  Employee: ").append(employee).append("\n");
+
+        sb.append("  Order Items:\n");
+        for (OrderProducts item : order) {
+            sb.append("    - ").append(item).append("\n");
+        }
+
+        return sb.toString();
+    }
+
 
 }

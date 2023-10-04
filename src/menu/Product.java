@@ -50,13 +50,14 @@ public class Product implements Serializable {
 
     @Override
     public String toString() {
-        return "Product: " +
-                "name:'" + name + '\'' +
-                ", description:'" + description + '\'' +
-                ", price:" + price +
-                ", category:'" + category + '\'' +
-                ", preparationTime:" + preparationTime +
-                '}';
+        StringBuilder sb = new StringBuilder();
+        sb.append("Product Information:\n");
+        sb.append("  Name: ").append(name).append("\n");
+        sb.append("  Description: ").append(description).append("\n");
+        sb.append("  Price: $").append(price).append("\n");
+        sb.append("  Category: ").append(category).append("\n");
+        sb.append("  Preparation Time: ").append(preparationTime).append(" minutes\n");
+        return sb.toString();
     }
 
 }

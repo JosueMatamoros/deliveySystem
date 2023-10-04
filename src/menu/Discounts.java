@@ -20,4 +20,12 @@ public class Discounts implements Serializable {
     public int getDiscount(){
         return this.discount;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Category: ").append(category).append("\n");
+        sb.append("Discount: ").append(discount).append("%\n");
+        return sb.toString();
+    }
 }
