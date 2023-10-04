@@ -41,11 +41,13 @@ public class OrderProducts implements Serializable {
 
     @Override
     public String toString() {
-        return "OrderProducts{" +
-                "product=" + product +
-                ", quantity=" + quantity +
-                ", subtotal=" + subtotal +
-                ", state=" + state +
-                '}';
+        return "Selected Product: " + product.getName() +
+               "\nDescription: " + product.getDescription() +
+               "\nPrice: $" + product.getPrice() +
+               "\nCategory: " + product.getCategory() +
+               "\nQuantity: " + quantity +
+               "\nSubtotal: $" + (product.getPrice() * quantity) +
+               "\nState: " + (state ? "true" : "false") +
+               "\n";
     }
 }

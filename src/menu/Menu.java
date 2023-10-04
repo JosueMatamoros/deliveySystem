@@ -35,4 +35,23 @@ public class Menu implements Serializable {
         this.discounts.remove(discount);
     }
 
+    @Override
+    public String toString() {
+        StringBuilder menuText = new StringBuilder();
+        menuText.append("Menu:\n");
+
+        int i = 0;
+        for (Product product : products) {
+            menuText.append((i + 1) + ". ").append(product.getName()).append(" (").append(product.getCategory()).append("):\n");
+            menuText.append("  Description: ").append(product.getDescription()).append("\n");
+            menuText.append("  Price: $").append(product.getPrice()).append("\n");
+            i++;
+        }
+
+        for (Discounts discount : discounts) {
+            menuText.append("Discount: ").append(discount.getDiscount());
+        }
+
+        return menuText.toString();
+    }
 }

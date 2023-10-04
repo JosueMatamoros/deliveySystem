@@ -3,6 +3,8 @@ import java.net.*;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
+
+import menu.Discounts;
 import menu.Menu;
 import menu.Product;
 import order.OrderProducts;
@@ -10,7 +12,7 @@ import order.OrderProducts;
 // THIS IS THE APP THAT SHOULD SEND DATA TO THE SERVER
 public class SocketClient {
     public static Scanner input = new Scanner(System.in);
-    public static void sendInformation() throws IOException, InputMismatchException {
+    public static void sendInformation() throws IOException, InputMismatchException, ClassNotFoundException {
         String serverIP = "127.0.0.1";
         int port = 12345;
 
@@ -23,46 +25,48 @@ public class SocketClient {
             PrintWriter outputWriter = new PrintWriter(clientSocket.getOutputStream(), true);
 
             ObjectOutputStream objectOutput = new ObjectOutputStream(clientSocket.getOutputStream());
+            ObjectInputStream objectInput = new ObjectInputStream(clientSocket.getInputStream());
 
-            // Display the previously created menu
-            Menu menu = new Menu();
-            menu.appendProduct(new Product("Product 1", "This is product 1", 10.0, "Lunch", 10));
-            menu.appendProduct(new Product("Product 2", "This is product 2", 20.0, "Lunch", 20));
-            menu.appendProduct(new Product("Product 3", "This is product 3", 30.0, "Lunch", 30));
+            // Receive the menu from the server
+            Menu menu = (Menu) objectInput.readObject();
 
-            // Send the first string (order identifier) to the server
-            ArrayList<OrderProducts> selectedProducts = new ArrayList<>(); // STORE WHAT THE CLIENT SELECTS;
-
-            System.out.println("Menu:");
-            int i = 1; // Variable for visual effects
+            // Mostrar productos
+            System.out.println("Products:");
+            int i = 0;
             for (Product product : menu.getProducts()) {
-                System.out.println(i + ". " + product.toString());
-                i++;
+                System.out.println((i+1) + ". " + product);
             }
 
+            // Mostrar descuentos
+            System.out.println("Descuentos:");
+            for (Discounts discount : menu.getDiscounts()) {
+                System.out.println(discount);
+            }
+
+             // Send the first string (order identifier) to the server
+            ArrayList<OrderProducts> selectedProducts = new ArrayList<>(); // STORE WHAT THE CLIENT SELECTS;
+
             while (true) {
-                System.out.print("Select a dish (enter 0 to finish): ");
-                int choice = input.nextInt();
+                System.out.println("Select a product by number (or enter 0 to finish):");
+                int option = input.nextInt();
 
-                if (choice == 0) {
-                    break; // The client has finished selecting
+                if (option == 0) {
+                    break; // The user has finished selecting products
+                }
 
-                } else if (choice >= 1 && choice <= menu.getProducts().size()) { // Size of the menu of dishes
-                    Product selectedProduct = menu.getProducts().get(choice - 1);
-                    System.out.println("How many do you want?");
+                if (option >= 1 && option <= menu.getProducts().size()) {
+                    Product selectedProduct = menu.getProducts().get(option - 1);
+
+                    System.out.println("Desired quantity:");
                     int quantity = input.nextInt();
-
-                    if (quantity == 0) {
-                        System.out.println("You cannot order 0 dishes");
-                        continue;
+                    if (quantity <= 0) {
+                        System.out.println("The quantity of selected products cannot be 0 or negative!");
                     } else {
-                        // Create an OrderProducts object based on the selected Product and quantity
-                        OrderProducts selectedDish = new OrderProducts(selectedProduct, quantity);
-                        selectedProducts.add(selectedDish); // Add the choice to the list of dishes
-                        System.out.println("You have selected: " + selectedDish.getProduct().getName() + " - $" + selectedDish.getProduct().getPrice());
+                        // Add the product and quantity to selectedProducts
+                        selectedProducts.add(new OrderProducts(selectedProduct, quantity));
                     }
                 } else {
-                    System.out.println("Invalid option.");
+                    System.out.println("Invalid option. Please select a valid product number.");
                 }
             }
 
@@ -156,9 +160,11 @@ public class SocketClient {
             e.printStackTrace();
         } catch (InputMismatchException ime) {
             System.out.println("Error! You must enter an integer!");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
         }
     }
-    public static void main(String[] args) {
+    public static void main(String[] args) throws ClassNotFoundException {
 
         try {
             System.out.println("PLEASE PRESS ENTER");
