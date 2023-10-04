@@ -95,6 +95,9 @@ public class Orders {
     public void setTableNumber(int tableNumber){
         this.tableNumber = tableNumber;
     }
+    public void setEmployee(Employee employee){
+        this.employee = employee;
+    }
     // Methods
     public void appendOrder(OrderProducts order){
         this.order.add(order);

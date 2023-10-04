@@ -8,7 +8,7 @@ public class OrderProducts implements Serializable {
     // Attributes
     private Product product;
     private int quantity;
-    private int subtotal;
+    private double subtotal;
     private Boolean state;
 
     // Constructor
@@ -26,7 +26,7 @@ public class OrderProducts implements Serializable {
     public int getQuantity(){
         return this.quantity;
     }
-    public int getSubtotal(){
+    public double getSubtotal(){
         return this.subtotal;
     }
     public Boolean getState(){
