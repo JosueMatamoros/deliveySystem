@@ -630,56 +630,74 @@ public class SocketMain {
 
                                                     } else {
                                                         // Order in the restaurant
-                                                        System.out.println(order.toString());
+                                                        System.out.println(order.toStringRestaurant());
 
                                                     }
 
                                                 }
                                                 break;
                                             case 2:
-                                                System.out.println("Orders");
-                                                for (Orders order : orders) {
-                                                    if (order.getState() == "New order"){
-                                                        System.out.println(order.getOrderNumber());
-                                                        for (OrderProducts orderProducts : order.getOrder()) {
-                                                            System.out.println(orderProducts.toString());
-                                                        }
-                                                    }
+                                               try {
+                                                   System.out.println("Orders");
+                                                   for (Orders order : orders) {
+                                                       if (order.getState() == "New order"){
+                                                           System.out.println(order.getOrderNumber());
+                                                           for (OrderProducts orderProducts : order.getOrder()) {
+                                                               System.out.println(orderProducts.toString());
+                                                           }
+                                                       }
 
-                                                }
-                                                System.out.println("Select the order to start");
-                                                int orderNumber = scanner.nextInt();
-                                                scanner.nextLine(); // Clean the buffer
+                                                   }
+                                                   System.out.println("Select the order to start");
+                                                   int orderNumber = scanner.nextInt();
 
-                                                // Search the order
-                                                boolean orderFound = false;
-                                                for (Orders order : orders) {
-                                                    if (order.getOrderNumber() == orderNumber){
-                                                        order.setState("In process");
-                                                        order.setTableNumber(++table);
-                                                        // Chose the employee
-                                                        System.out.println("Employees");
-                                                        int i = 0;
-                                                        for (Employee employee : employees) {
-                                                            System.out.print(++i + ". ");
-                                                            System.out.print(employee.getFullName());
-                                                            System.out.print(" -> ");
-                                                            System.out.print(employee.getJob());
-                                                            System.out.println(" ");
-                                                        }
-                                                        System.out.println("Select the employee");
-                                                        int employeeNumber = scanner.nextInt();
-                                                        order.setEmployee(employees.get(employeeNumber - 1));
-                                                        order.setState("In the kitchen");
-                                                        System.out.println("Order started");
-                                                        orderFound = true;
-                                                        break;
-                                                    }
+                                                   // Check if the order is on another state
+                                                   boolean orderAlreadyStarted = false;
+                                                   for (Orders order : orders) {
+                                                       if (order.getState() != "New order" && order.getOrderNumber() == orderNumber){
+                                                           System.out.println("Order already started");
+                                                           orderAlreadyStarted = true;
+                                                           break;
+                                                       }
+                                                   }
+                                                   if (orderAlreadyStarted){
+                                                       break;
+                                                   }
+                                                   scanner.nextLine(); // Clean the buffer
 
-                                                }
-                                                if (!orderFound){
-                                                    System.out.println("Order not found");
-                                                }
+                                                   // Search the order
+                                                   boolean orderFound = false;
+                                                   for (Orders order : orders) {
+                                                       if (order.getOrderNumber() == orderNumber){
+                                                           order.setState("In process");
+                                                           order.setTableNumber(++table);
+                                                           // Chose the employee
+                                                           System.out.println("Employees");
+                                                           int i = 0;
+                                                           for (Employee employee : employees) {
+                                                               System.out.print(++i + ". ");
+                                                               System.out.print(employee.getFullName());
+                                                               System.out.print(" -> ");
+                                                               System.out.print(employee.getJob());
+                                                               System.out.println(" ");
+                                                           }
+                                                           System.out.println("Select the employee");
+                                                           int employeeNumber = scanner.nextInt();
+                                                           order.setEmployee(employees.get(employeeNumber - 1));
+                                                           order.setState("In the kitchen");
+                                                           System.out.println("Order started");
+                                                           orderFound = true;
+                                                           break;
+                                                       }
+
+                                                   }
+                                                   if (!orderFound){
+                                                       System.out.println("Order not found");
+                                                   }
+                                               }catch (Exception e) {
+                                                   System.out.println("Invalid option");
+                                                   scanner.nextLine();
+                                               }
                                                 break;
                                             case 3:
                                                 System.out.println("Orders");
@@ -693,6 +711,19 @@ public class SocketMain {
                                                 }
                                                 System.out.println("Select the order to finish");
                                                 int orderNumber1 = scanner.nextInt();
+
+                                                // Check if the order is on another state
+                                                boolean orderAlreadyStarted = false;
+                                                for (Orders order : orders) {
+                                                    if (order.getOrderNumber() == orderNumber1 && order.getState() != "In the kitchen"){
+                                                        System.out.println("Order already started");
+                                                        orderAlreadyStarted = true;
+                                                        break;
+                                                    }
+                                                }
+                                                if (orderAlreadyStarted){
+                                                    break;
+                                                }
                                                 scanner.nextLine(); // Clean the buffer
                                                 // Search the order
                                                 boolean orderFound1 = false;
