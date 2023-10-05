@@ -22,6 +22,15 @@ public class Address {
         return this.province + ", " + this.canton + ", " + this.district + ", " + this.exactAddress + " ( " + this.description + " )";
     }
 
-
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Province: ").append(province).append("\n");
+        sb.append("District: ").append(district).append("\n");
+        sb.append("Canton: ").append(canton).append("\n");
+        sb.append("Exact Address: ").append(exactAddress).append("\n");
+        sb.append("Description: ").append(description).append("\n");
+        return sb.toString();
+    }
 
 }

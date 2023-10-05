@@ -1,7 +1,5 @@
 package order;
 
-import menu.Discounts;
-import menu.Menu;
 import person.Client;
 import person.Employee;
 import person.aggregated.Address;

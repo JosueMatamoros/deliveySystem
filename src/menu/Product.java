@@ -2,7 +2,6 @@ package menu;
 
 import java.io.Serializable;
 
-import javax.swing.*;
 
 public class Product implements Serializable {
     // Attributes

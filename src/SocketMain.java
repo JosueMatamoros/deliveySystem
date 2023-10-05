@@ -87,7 +87,35 @@ public class SocketMain {
                         new Discounts("Desserts", 10),
                     };
 
-                    // Send the menu to the client
+                // Client
+                Address[] addressesList = {
+                        new Address("San Jose", "Escazu", "San Antonio", "789 Mountain View Road", "Mountain Cabin"),
+                        new Address("Alajuela", "Grecia", "Grecia", "567 Parkside Drive", "Rural Farmhouse"),
+                        new Address("Cartago", "La Union", "Tres Rios", "210 Riverside Avenue", "Suburban Home"),
+                        new Address("Cartago", "La Union", "Tres Rios", "210 Riverside Avenue", "Suburban Home")
+                };
+
+                // Create a list of addresses
+                ArrayList<Address> client1Addresses = new ArrayList<>();
+                client1Addresses.add(addressesList[0]);
+                client1Addresses.add(addressesList[1]);
+                ArrayList<Address> client2Addresses = new ArrayList<>();
+                client2Addresses.add(addressesList[2]);
+                client2Addresses.add(addressesList[3]);
+                ArrayList<Address> client3Addresses = new ArrayList<>();
+                client3Addresses.add(addressesList[2]);
+                client3Addresses.add(addressesList[0]);
+
+                // Create a client with the list of addresses
+                ArrayList<Client> clientArrayList = new ArrayList<>();
+                Client client1 = new Client("Juana Mora Perez", "83337675", "Masculino", (byte) 18, client1Addresses);
+                Client client2 = new Client("Maria Mora Perez", "83337675", "Masculino", (byte) 18, client2Addresses);
+                Client client3 = new Client("Juana Mora Perez", "83337675", "Masculino", (byte) 18, client3Addresses);
+                clientArrayList.add(client1);
+                clientArrayList.add(client2);
+                clientArrayList.add(client3);
+
+                // Send the menu to the client
                     Menu menu = new Menu();
                     for (Product product : productos) {
                         menu.appendProduct(product);
@@ -136,7 +164,6 @@ public class SocketMain {
                         // Read the client's response
                         String clientResponse = inputBuffer.readLine();
 
-
                         if (clientResponse != null && !clientResponse.isEmpty()) {
                             try {
                                 int option = Integer.parseInt(clientResponse);
@@ -147,9 +174,8 @@ public class SocketMain {
                                         orders.add(newOrder);
                                         confirmation.println("List of orders:");
                                         for (Orders order : orders) {
-                                            confirmation.println(order.toString());
+                                            confirmation.println(order);
                                         }
-                                        confirmation.println(newOrder.toString());
                                         finish = true;
                                         break;
                                     case 2:
@@ -167,8 +193,8 @@ public class SocketMain {
                                             // THIS SHOULD NOT BE SHOWN ON THE CLIENT SIDE, IT SHOULD GO TO THE RESTAURANT;
                                             confirmation.println("List of orders:");
                                             for (Orders order : orders) {
-                                                confirmation.println(order.toString());
-                                                System.out.println(order.toString());
+                                                confirmation.println(order);
+                                                System.out.println(order);
                                             }
 
                                         } catch (DateTimeParseException e) {
@@ -192,26 +218,30 @@ public class SocketMain {
                                             confirmation.println("The client is a frequent customer");
                                             confirmation.println("Enter your full name: ");
                                             String fullName = inputBuffer.readLine();
-                                            confirmation.println("Enter your phone number: ");
-                                            String phoneNumber = inputBuffer.readLine();
-                                            confirmation.println("Enter your gender: ");
-                                            String gender = inputBuffer.readLine();
-                                            confirmation.println("Enter your age: ");
-                                            Byte age = Byte.parseByte(inputBuffer.readLine());
 
-                                            Client client = new Client(fullName, phoneNumber, gender, age, null);
+                                            Client clientOne = null;
+                                            if(searchClient(clientArrayList, fullName)){
+                                                confirmation.println("The client is a frequent customer");
+                                                for (Client client : clientArrayList) {
+                                                    if (client.getFullName().equalsIgnoreCase(fullName)){
+                                                        clientOne = new Client(client.getFullName(), client.getPhone(), client.getGender(), client.getAge(), client.getAddresses());
+                                                        Orders newOrderExpress = new Orders(selectedProducts, null, clientOne);
+                                                        orders.add(newOrderExpress);
+                                                        finish = true;
+                                                    } else {
+                                                        continue;
+                                                    }
+                                                }
 
-                                            System.out.println("Full name client is: " + client.getFullName());
-
-                                            Orders newOrderExpress = new Orders(selectedProducts, null, client);
-
-                                            orders.add(newOrderExpress);
-
-                                            confirmation.println("List of orders:");
-                                            for (Orders order : orders) {
-                                                confirmation.println(order.toString());
+                                            } else {
+                                                finish = false;
                                             }
-                                            finish = true;
+
+                                            if (clientOne != null) {
+                                                confirmation.println("You're a frequent dates: " + fullName + " " + "and your address are: " + clientOne.getAddresses());
+                                            } else {
+                                                confirmation.println("You're not a frequent customer");
+                                            }
                                         } else if (frequentCustomerResponse.equalsIgnoreCase("n")) {
                                             confirmation.println("The client is not a frequent customer");
 
@@ -271,7 +301,7 @@ public class SocketMain {
                             confirmation.println("The client sent an empty or null response.");
                         }
 
-                    } while (finish == false);
+                    } while (!finish);
 
                     // Address
                     person.aggregated.Address address = new person.aggregated.Address("Alajuela", "Penas Blancas", "San Ramon", "Chachagua", "In front of the church");
@@ -290,9 +320,6 @@ public class SocketMain {
                     ArrayList<Client> clients = new ArrayList<>();
                     clients.add(new Client("Kenny Rofrigues","+506 7296 8552", "Male", (byte)21, addresses));
                     clients.add(new Client("Asdrubal Ulate", "+506 8850 9804","Male", (byte)21, addresses1));
-
-
-
 
                 int opcion = 0;
                 do {
@@ -630,7 +657,7 @@ public class SocketMain {
 
                                                     } else {
                                                         // Order in the restaurant
-                                                        System.out.println(order.toString());
+                                                        System.out.println(order);
 
                                                     }
 
@@ -790,6 +817,8 @@ public class SocketMain {
                         scanner.nextLine();
                     }
                 }while (opcion != 5);
+
+                // EXPRESS SERVICE;
             }
         } catch (Exception e) {
             System.out.println("Warning");
@@ -813,4 +842,12 @@ public class SocketMain {
         return new Address(province, district, canton, exactAddress, description);
     }
 
+    public static boolean searchClient(ArrayList<Client> clients, String name){
+        for (Client client : clients) {
+            if (client.getFullName().equalsIgnoreCase(name)){
+                return true;
+            }
+        }
+        return false;
+    }
 }

@@ -1,7 +1,6 @@
 package menu;
 
 import java.io.Serializable;
-import java.util.Date;
 
 public class Discounts implements Serializable {
     // Attributes
