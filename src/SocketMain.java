@@ -14,6 +14,7 @@ import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
+
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.time.LocalTime;
@@ -58,17 +59,17 @@ public class SocketMain {
                 employees.add( new Employee("Hector Caravaca", "+506 8333 9684", "Male", (byte) 21, "Chef", 30, false));
 
                 // Product
-                Product [] productos = {new Product("Coca-Cola", "Carbonated cola drink", 2.0, "Beverages", 50),
+                Product [] productos = {new Product("Coca-Cola", "Carbonated cola drink", 2.0, "Beverages", 0),
                         new Product("Cheeseburger", "Classic cheeseburger with Angus beef", 12.5, "Fast Food", 20),
                         new Product("Margherita Pizza", "Pizza with tomato sauce, mozzarella, and basil", 16.5, "Fast Food", 15),
                         new Product("Grilled Chicken", "Grilled chicken breast with vegetables", 20.0, "Main Course", 12),
-                        new Product("Fruit Salad", "Fresh mixed fruit salad", 3.5, "Kids' Menu", 30),
-                        new Product("Hot Dog", "Hot dog with various toppings", 10.5, "Fast Food", 25),
+                        new Product("Fruit Salad", "Fresh mixed fruit salad", 3.5, "Kids' Menu", 5),
+                        new Product("Hot Dog", "Hot dog with various toppings", 6.5, "Fast Food", 25),
                         new Product("Spaghetti Bolognese", "Spaghetti with meat sauce", 12.5, "Main Course", 18),
-                        new Product("Milk", "Glass of fresh milk", 1.5, "Beverages", 40),
+                        new Product("Milk", "Glass of fresh milk", 1.5, "Beverages", 0),
                         new Product("Quesadilla", "Cheese quesadilla with guacamole", 14.0, "Fast Food", 20),
                         new Product("Chicken Nuggets", "Chicken nuggets with honey mustard sauce", 12.5, "Kids' Menu", 15),
-                        new Product("Orange Juice", "Freshly squeezed orange juice", 5.0, "Beverages", 35),
+                        new Product("Orange Juice", "Freshly squeezed orange juice", 5.0, "Beverages", 0),
                         new Product("Tomato Soup", "Tomato soup with croutons", 9.0, "Main Course", 22),
                         new Product("Apple Pie", "Classic apple pie", 9.0, "Desserts", 18),
                         new Product("French Fries", "French fries with ketchup", 7.0, "Fast Food", 28),
@@ -77,7 +78,7 @@ public class SocketMain {
                         new Product("Chocolate Milkshake", "Chocolate milkshake with whipped cream", 15.0, "Beverages", 18),
                         new Product("Vanilla Pudding", "Vanilla pudding with cookies", 6.5, "Desserts", 30),
                         new Product("Apple Crumble", "Warm apple crumble with vanilla ice cream", 18.0, "Desserts", 12),
-                        new Product("Mineral Water", "Bottle of mineral water", 1.0, "Beverages", 50),
+                        new Product("Mineral Water", "Bottle of mineral water", 1.0, "Beverages", 0),
                     };
                     // Discounts
                     Discounts [] discounts = {new Discounts("Beverages", 10),
@@ -140,22 +141,30 @@ public class SocketMain {
 
                     // Add the orders to the list of orders
                     ArrayList<OrderProducts> burnOrders = new ArrayList<>();
-                    ArrayList<OrderProducts> burnOrders1 = new ArrayList<>();
+                    ArrayList<OrderProducts> burnOrdersToPickUp = new ArrayList<>();
+                    ArrayList<OrderProducts> burnOrdersToDeliver = new ArrayList<>();
+
                     OrderProducts order1 = new OrderProducts(productos[0], 1);
                     OrderProducts order2 = new OrderProducts(productos[5], 1);
                     OrderProducts order3 = new OrderProducts(productos[10], 1);
                     OrderProducts order4 = new OrderProducts(productos[15], 1);
+                    OrderProducts order5 = new OrderProducts(productos[1], 1);
+                    OrderProducts order6 = new OrderProducts(productos[6], 2);
 
-                    // Order of the first client
+                    // Order of the first client to eat in the restaurant
                     burnOrders.add(order1);
                     burnOrders.add(order2);
-                    // Order of the second client
-                    burnOrders1.add(order3);
-                    burnOrders1.add(order4);
+                    // Order of the second client to Pick Up
+                    burnOrdersToPickUp.add(order3);
+                    burnOrdersToPickUp.add(order4);
+                    // Order of the third client to deliver
+                    burnOrdersToDeliver.add(order5);
+                    burnOrdersToDeliver.add(order6);
 
                     // Add the orders to the list of orders
                     orders.add(new Orders(burnOrders));
-                    orders.add(new Orders(burnOrders1));
+                    orders.add(new Orders(burnOrdersToPickUp, LocalTime.of(2, 0, 0)));
+                    orders.add(new Orders(burnOrdersToDeliver, new Address("Alajuela", "San Carlos", "San Ramon", "El burrito", "In front of the church") , null));
 
                     do {
                         // Send a message to the client
@@ -651,67 +660,85 @@ public class SocketMain {
                                                 for (Orders order : orders) {
                                                     if (order.getAddress() != null || order.getClient() != null){
                                                         // Order to deliver
-
+                                                        System.out.println(order.toStringDeliver());
                                                     } else if (order.getPickUpTime() != null){
                                                         // Order to go
-
+                                                        System.out.println(order.toStringPickUp());
                                                     } else {
                                                         // Order in the restaurant
                                                         System.out.println(order);
 
+                                                        System.out.println(order.toStringRestaurant());
                                                     }
-
                                                 }
                                                 break;
                                             case 2:
-                                                System.out.println("Orders");
-                                                for (Orders order : orders) {
-                                                    if (order.getState() == "New order"){
-                                                        System.out.println(order.getOrderNumber());
-                                                        for (OrderProducts orderProducts : order.getOrder()) {
-                                                            System.out.println(orderProducts.toString());
-                                                        }
-                                                    }
+                                               try {
+                                                   System.out.println("Orders");
+                                                   for (Orders order : orders) {
+                                                       if (order.getState().equals("New order")){
+                                                           System.out.println(order.getOrderNumber());
+                                                           for (OrderProducts orderProducts : order.getOrder()) {
+                                                               System.out.println(orderProducts.toString());
+                                                           }
+                                                       }
 
-                                                }
-                                                System.out.println("Select the order to start");
-                                                int orderNumber = scanner.nextInt();
-                                                scanner.nextLine(); // Clean the buffer
+                                                   }
+                                                   System.out.println("Select the order to start");
+                                                   int orderNumber = scanner.nextInt();
 
-                                                // Search the order
-                                                boolean orderFound = false;
-                                                for (Orders order : orders) {
-                                                    if (order.getOrderNumber() == orderNumber){
-                                                        order.setState("In process");
-                                                        order.setTableNumber(++table);
-                                                        // Chose the employee
-                                                        System.out.println("Employees");
-                                                        int i = 0;
-                                                        for (Employee employee : employees) {
-                                                            System.out.print(++i + ". ");
-                                                            System.out.print(employee.getFullName());
-                                                            System.out.print(" -> ");
-                                                            System.out.print(employee.getJob());
-                                                            System.out.println(" ");
-                                                        }
-                                                        System.out.println("Select the employee");
-                                                        int employeeNumber = scanner.nextInt();
-                                                        order.setEmployee(employees.get(employeeNumber - 1));
-                                                        order.setState("In the kitchen");
-                                                        System.out.println("Order started");
-                                                        orderFound = true;
-                                                        break;
-                                                    }
+                                                   // Check if the order is on another state
+                                                   boolean orderAlreadyStarted = false;
+                                                   for (Orders order : orders) {
+                                                       if (!order.getState().equals("New order") && order.getOrderNumber() == orderNumber){
+                                                           System.out.println("Order already started");
+                                                           orderAlreadyStarted = true;
+                                                           break;
+                                                       }
+                                                   }
+                                                   if (orderAlreadyStarted){
+                                                       break;
+                                                   }
+                                                   scanner.nextLine(); // Clean the buffer
 
-                                                }
-                                                if (!orderFound){
-                                                    System.out.println("Order not found");
-                                                }
+                                                   // Search the order
+                                                   boolean orderFound = false;
+                                                   for (Orders order : orders) {
+                                                       if (order.getOrderNumber() == orderNumber){
+                                                           order.setState("In process");
+                                                           order.setTableNumber(++table);
+                                                           // Chose the employee
+                                                           System.out.println("Employees");
+                                                           int i = 0;
+                                                           for (Employee employee : employees) {
+                                                               System.out.print(++i + ". ");
+                                                               System.out.print(employee.getFullName());
+                                                               System.out.print(" -> ");
+                                                               System.out.print(employee.getJob());
+                                                               System.out.println(" ");
+                                                           }
+                                                           System.out.println("Select the employee");
+                                                           int employeeNumber = scanner.nextInt();
+                                                           order.setEmployee(employees.get(employeeNumber - 1));
+                                                           order.setState("In the kitchen");
+                                                           System.out.println("Order started");
+                                                           orderFound = true;
+                                                           break;
+                                                       }
+
+                                                   }
+                                                   if (!orderFound){
+                                                       System.out.println("Order not found");
+                                                   }
+                                               }catch (Exception e) {
+                                                   System.out.println("Invalid option");
+                                                   scanner.nextLine();
+                                               }
                                                 break;
                                             case 3:
                                                 System.out.println("Orders");
                                                 for (Orders order : orders) {
-                                                    if (order.getState() == "In the kitchen"){
+                                                    if (order.getState().equals("In the kitchen")){
                                                         System.out.println(order.getOrderNumber());
                                                         for (OrderProducts orderProducts : order.getOrder()) {
                                                             System.out.println(orderProducts.toString());
@@ -720,6 +747,19 @@ public class SocketMain {
                                                 }
                                                 System.out.println("Select the order to finish");
                                                 int orderNumber1 = scanner.nextInt();
+
+                                                // Check if the order is on another state
+                                                boolean orderAlreadyStarted = false;
+                                                for (Orders order : orders) {
+                                                    if (order.getOrderNumber() == orderNumber1 && !order.getState().equals("In the kitchen")){
+                                                        System.out.println("Order already started");
+                                                        orderAlreadyStarted = true;
+                                                        break;
+                                                    }
+                                                }
+                                                if (orderAlreadyStarted){
+                                                    break;
+                                                }
                                                 scanner.nextLine(); // Clean the buffer
                                                 // Search the order
                                                 boolean orderFound1 = false;

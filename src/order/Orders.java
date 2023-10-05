@@ -133,23 +133,70 @@ public class Orders {
 
         StringBuilder sb = new StringBuilder();
         sb.append("Order Information:\n");
+        sb.append("\n");
         sb.append("  Order Number: ").append(orderNumber).append("\n");
         sb.append("  Table Number: ").append(tableNumber).append("\n");
         sb.append("  Date: ").append(date).append("\n");
         sb.append("  State: ").append(state).append("\n");
         sb.append("  Total: $").append(total).append("\n");
         sb.append("  Total Time: ").append(totalTime).append(" minutes\n");
-
         sb.append("  Employee: ").append(employee).append("\n");
-        sb.append("  Client: ").append(client).append("\n");
-
+        sb.append("\n");
         sb.append("  Order Items:\n");
         for (OrderProducts item : order) {
-            sb.append("    - ").append(item).append("\n");
+            sb.append(item).append("\n");
         }
 
         return sb.toString();
     }
+    public String toStringPickUp(){
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("Order Information:\n");
+        sb.append("\n");
+        sb.append("  Order Number: ").append(orderNumber).append("\n");
+        sb.append("  Date: ").append(date).append("\n");
+        sb.append("  Pick-up Time: ").append(pickUpTime).append("\n");
+        sb.append("  State: ").append(state).append("\n");
+        sb.append("  Total: $").append(total).append("\n");
+        sb.append("  Total Time: ").append(totalTime).append(" minutes\n");
+        sb.append("  Employee: ").append(employee).append("\n");
+        sb.append("\n");
+        sb.append("  Order Items:\n");
+        for (OrderProducts item : order) {
+            sb.append(item).append("\n");
+        }
+
+        return sb.toString();
+    }
+
+    public String toStringDeliver(){
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("Order Information:\n");
+        sb.append("\n");
+        sb.append("  Order Number: ").append(orderNumber).append("\n");
+        sb.append("  Date: ").append(date).append("\n");
+        if (address != null) {
+            sb.append("  Address: ").append(address).append("\n");
+        }
+        else {
+            sb.append("  Address: ").append(client.getAddresses()).append("\n");
+        }
+        sb.append("  State: ").append(state).append("\n");
+        sb.append("  Total: $").append(total).append("\n");
+        sb.append("  Total Time: ").append(totalTime).append(" minutes\n");
+        sb.append("  Employee: ").append(employee).append("\n");
+        sb.append("\n");
+        sb.append("  Order Items:\n");
+        for (OrderProducts item : order) {
+            sb.append(item).append("\n");
+        }
+
+        return sb.toString();
+    }
+
+
 
     public String toStringClient() {
         StringBuilder sb = new StringBuilder();
