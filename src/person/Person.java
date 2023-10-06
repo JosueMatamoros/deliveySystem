@@ -2,9 +2,9 @@ package person;
 
 abstract class Person {
     // Attributes
-    private final String fullName;
+    private String fullName;
     private String phone;
-    private final String gender;
+    private String gender;
     private Byte age;
 
     // Constructor

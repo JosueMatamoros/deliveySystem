@@ -5,22 +5,23 @@ import person.Employee;
 import person.aggregated.Address;
 
 import java.sql.Date;
+import java.sql.Time;
 import java.time.LocalTime;
 import java.util.ArrayList;
 
 public class Orders {
     // Atributes
-    private final ArrayList<OrderProducts> order;
-    private double total;
-    private final Date date;
-    private int totalTime;
+    private ArrayList<OrderProducts> order = new ArrayList<OrderProducts>();
+    private int total;
+    private Date date;
+    private Time totalTime;
     private int tableNumber;
     private LocalTime pickUpTime;
     private String state;
     private Employee employee;
     private Address address;
     private Client client;
-    private final int orderNumber;
+    private int orderNumber;
 
     static int orderCount = 199;
 
@@ -55,13 +56,13 @@ public class Orders {
     public ArrayList<OrderProducts> getOrder(){
         return this.order;
     }
-    public double getTotal(){
+    public int getTotal(){
         return this.total;
     }
     public Date getDate(){
         return this.date;
     }
-    public int getTotalTime(){
+    public Time getTotalTime(){
         return this.totalTime;
     }
     public int getTableNumber(){
@@ -95,12 +96,6 @@ public class Orders {
     public void setEmployee(Employee employee){
         this.employee = employee;
     }
-    public void setTotal(double total){
-        this.total = total;
-    }
-    public void setPreparationTime(int totalTime){
-        this.totalTime = totalTime;
-    }
     // Methods
     public void appendOrder(OrderProducts order){
         this.order.add(order);
@@ -121,7 +116,7 @@ public class Orders {
         sb.append("  Total: $").append(total).append("\n");
         sb.append("  Total Time: ").append(totalTime).append(" minutes\n");
 
-        sb.append("  Employee: ").append(employee.getFullName()).append("\n");
+        sb.append("  Employee: ").append(employee).append("\n");
         sb.append("  Client: ").append(client).append("\n");
 
         sb.append("  Address: ").append(address).append("\n");
@@ -145,7 +140,7 @@ public class Orders {
         sb.append("  State: ").append(state).append("\n");
         sb.append("  Total: $").append(total).append("\n");
         sb.append("  Total Time: ").append(totalTime).append(" minutes\n");
-        sb.append("  Employee: ").append(employee.getFullName()).append("\n");
+        sb.append("  Employee: ").append(employee).append("\n");
         sb.append("\n");
         sb.append("  Order Items:\n");
         for (OrderProducts item : order) {
@@ -165,7 +160,7 @@ public class Orders {
         sb.append("  State: ").append(state).append("\n");
         sb.append("  Total: $").append(total).append("\n");
         sb.append("  Total Time: ").append(totalTime).append(" minutes\n");
-        sb.append("  Employee: ").append(employee.getFullName()).append("\n");
+        sb.append("  Employee: ").append(employee).append("\n");
         sb.append("\n");
         sb.append("  Order Items:\n");
         for (OrderProducts item : order) {
@@ -200,6 +195,8 @@ public class Orders {
 
         return sb.toString();
     }
+
+
 
     public String toStringClient() {
         StringBuilder sb = new StringBuilder();
