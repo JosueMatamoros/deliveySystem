@@ -17,11 +17,11 @@ import java.io.PrintWriter;
 
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.sql.Time;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.ArrayList;
-import java.util.Scanner;
+import java.util.*;
 
 
 public class SocketMain {
@@ -32,7 +32,7 @@ public class SocketMain {
         Scanner scanner = new Scanner(System.in);
 
         // CREATING THE RESTAURANT SERVER, IS "MAIN" SERVER;
-        int port = 12345;
+        int port = 4000;
         ServerSocket serverSocket = null;
 
         try {
@@ -338,7 +338,8 @@ public class SocketMain {
                     System.out.println("2. Edit Clients");
                     System.out.println("3. Edit Employees");
                     System.out.println("4. Orders Administration");
-                    System.out.println("5. Exit");
+                    System.out.println("5. Reports");
+                    System.out.println("6. Exit");
                     try {
                         // Get the option
                         opcion = scanner.nextInt();
@@ -531,7 +532,7 @@ public class SocketMain {
                                         System.out.println("Invalid option");
                                         scanner.nextLine();
                                     }
-                                }while (opcion != 3);
+                                }while (opcion != 4);
                                 break;
 
                             case 3:
@@ -541,6 +542,7 @@ public class SocketMain {
                                     System.out.println("3. Edit Employee");
                                     System.out.println("4. Show Employees");
                                     System.out.println("5. Exit");
+
                                     try {
                                         opcion = scanner.nextInt();
                                         switch (opcion){
@@ -625,9 +627,10 @@ public class SocketMain {
                                                     System.out.print(employee.getFullName());
                                                     System.out.print(" -> ");
                                                     System.out.print(employee.getJob());
-                                                    System.out.print(" -> ");
+                                                    System.out.print(" -> $");
                                                     System.out.print(employee.getSalary());
-                                                    System.out.println(" ");
+                                                    System.out.println("/hr");
+
                                                 }
                                                 break;
                                             case 5:
@@ -644,13 +647,14 @@ public class SocketMain {
                                 }while (opcion != 5);
                                 break;
                             case 4:
+                                int orderOpction = 0;
                                 do {
                                     System.out.println("1. Show Orders");
                                     System.out.println("2. Start Order");
                                     System.out.println("3. Finish Order");
-                                    System.out.println("4. Exit");
+                                    System.out.println("4. mark pickup order");
+                                    System.out.println("5. Exit");
 
-                                    int orderOpction = 0;
                                     try {
                                         scanner.nextLine(); // Clean the buffer
                                         orderOpction = scanner.nextInt();
@@ -672,8 +676,8 @@ public class SocketMain {
                                                             cont += orderProducts.getProduct().getPrice() * orderProducts.getQuantity() * (1 - discontPercentage / 100.0);
                                                             preparationTime += (int) orderProducts.getProduct().getPreparationTime();
                                                         }
-                                                        //order.setTotal(cont);
-                                                        //order.setPreparationTime(preparationTime);
+                                                        order.setTotal((int) cont);
+                                                        order.setPreparationTime(preparationTime);
                                                     }
                                                     if (order.getAddress() != null || order.getClient() != null){
                                                         // Order to deliver
@@ -843,14 +847,22 @@ public class SocketMain {
                                                                     // Check if all the products are ready
                                                                     boolean allReady = true;
                                                                     for (OrderProducts orderProducts : order.getOrder()) {
-                                                                        // Mark products without time preparation as ready
                                                                         if (!orderProducts.getState()){
                                                                             allReady = false;
                                                                             break;
                                                                         }
                                                                     }
                                                                     if (allReady){
-                                                                        order.setState("Ready");
+                                                                        if (order.getAddress() != null || order.getClient() != null){
+                                                                            // Order to deliver System.out.println(order.toStringDeliver());
+                                                                            order.setState("Ready to deliver");
+                                                                        } else if (order.getPickUpTime() != null){
+                                                                            // Order to go
+                                                                            order.setState("Ready to pick up");
+                                                                        } else {
+                                                                            // Order to eat in the restaurant
+                                                                            order.setState("Ready");
+                                                                        }
                                                                         // Mark the employee as available
                                                                         order.getEmployee().setState(false);
                                                                         System.out.println("Order finished");
@@ -875,6 +887,30 @@ public class SocketMain {
 
                                                 break;
                                             case 4:
+                                                System.out.println("Orders");
+                                                for (Orders order : orders) {
+                                                    if (order.getState().equals("Ready to pick up")){
+                                                        System.out.println(order.getOrderNumber());
+                                                        for (OrderProducts orderProducts : order.getOrder()) {
+                                                            System.out.println(orderProducts.toString());
+                                                        }
+                                                    }
+                                                }
+                                                System.out.println("Select the order to mark as pickup");
+                                                int orderNumber2 = scanner.nextInt();
+                                                for (Orders order : orders) {
+                                                    if (order.getOrderNumber() == orderNumber2) {
+                                                        if (order.getState() != "Ready to pick up") {
+                                                            System.out.println("Order not ready to pick up");
+                                                            break;
+                                                        }
+                                                        // Mark the order as pickup
+                                                        order.setState("Ready");
+                                                        System.out.println("Order marked as Ready");
+                                                    }
+                                                }
+                                                break;
+                                            case 5:
                                                 break;
                                             default:
                                                 System.out.println("Invalid option");
@@ -884,21 +920,87 @@ public class SocketMain {
                                         System.out.println("Invalid option");
                                         scanner.nextLine();
                                     }
-                                }while (opcion != 4);
+                                }while (orderOpction != 5);
                                 break;
                             case 5:
+                                System.out.println("1. Total sales");
+                                System.out.println("2. Total sales by delivery");
+                                System.out.println("3. Completed order history");
+                                System.out.println("4. Exit");
+                                int opcion4 = scanner.nextInt();
+                                switch (opcion4) {
+                                    case 1: // Total sales
+                                        double totalSales = 0;
+                                        int quantityOrders = 0;
+                                        for (Orders order : orders) {
+                                            if (order.getState().equalsIgnoreCase("Ready")) {
+                                            totalSales += order.getTotal();
+                                            for (OrderProducts orderProducts : order.getOrder()) {
+                                                quantityOrders = orderProducts.getQuantity();
+                                                for (Product product : menu.getProducts()) {
+                                                    if (orderProducts.getProduct().getName().equals(product.getName())) {
+                                                        product.setQuantityPerDay(quantityOrders);
+                                                    }
+                                                }
+                                            }
+                                            }
+                                        }
+                                        System.out.println("Date:" + orders.get(2).getDate());
+                                        System.out.println("\n");
+                                        System.out.println("Total sales: " + totalSales);
+                                        System.out.println("Products sold: ");
+                                        // List of products
+                                        List<Product> productList = menu.getProducts();
+
+                                        // if quantityPerDay is 0, remove the product from the list
+                                        productList.removeIf(product -> product.getQuantityPerDay() == 0);
+
+                                        // Sort the list by quantityPerDay
+                                        Collections.sort(productList, Comparator.comparingInt(Product::getQuantityPerDay).reversed());
+
+                                        // Show the list
+                                        for (Product product : productList) {
+                                            System.out.println(product.getName() + " -> " + product.getQuantityPerDay());
+                                        }
+                                        break;
+                                    case 2:
+                                        // Incluir segundo reporte aqui
+                                        break;
+                                    case 3:
+                                       System.out.println("Orders");
+                                       System.out.println("\n");
+                                        for (Orders order : orders) {
+                                            if (order.getState().equals("Ready")){
+                                                if (order.getClient() != null){
+                                                    System.out.println(order.toStringDeliver());
+                                                } else if (order.getPickUpTime() != null){
+                                                    System.out.println(order.toStringPickUp());
+                                                } else {
+                                                    System.out.println(order.toStringRestaurant());
+                                                }
+                                            }
+                                        }
+                                        break;
+                                    case 4:
+                                        break;
+                                    default:
+                                        System.out.println("Invalid option");
+                                        break;
+
+                                }
+                                break;
+                            case 6:
                                 break;
                             default:
                                 System.out.println("Invalid option");
                                 break;
                         }
 
-
                     } catch (Exception e) {
                         System.out.println("Invalid option");
                         scanner.nextLine();
                     }
-                }while (opcion != 5);
+                }while (opcion != 6);
 
                 // EXPRESS SERVICE;
             }

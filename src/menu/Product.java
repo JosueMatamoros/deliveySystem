@@ -10,6 +10,7 @@ public class Product implements Serializable {
     private double price;
     private String category;
     private double preparationTime;
+    private int quantityPerDay;
 
     // Constructor
     public Product(String name, String description, double price, String category, double preparationTime){
@@ -32,6 +33,9 @@ public class Product implements Serializable {
     public String getCategory(){
         return this.category;
     }
+    public int getQuantityPerDay(){
+        return this.quantityPerDay;
+    }
 
     public double getPreparationTime(){
         return this.preparationTime;
@@ -45,6 +49,9 @@ public class Product implements Serializable {
     }
     public void setPrice(double price){
         this.price = price;
+    }
+    public void setQuantityPerDay(int quantityPerDay){
+        this.quantityPerDay += quantityPerDay;
     }
 
     @Override

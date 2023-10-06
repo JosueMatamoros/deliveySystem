@@ -15,7 +15,7 @@ public class Orders implements Serializable {
     private ArrayList<OrderProducts> order = new ArrayList<OrderProducts>();
     private int total;
     private Date date;
-    private Time totalTime;
+    private int totalTime;
     private int tableNumber;
     private LocalTime pickUpTime;
     private String state;
@@ -63,7 +63,7 @@ public class Orders implements Serializable {
     public Date getDate(){
         return this.date;
     }
-    public Time getTotalTime(){
+    public int getTotalTime(){
         return this.totalTime;
     }
     public int getTableNumber(){
@@ -96,6 +96,12 @@ public class Orders implements Serializable {
     }
     public void setEmployee(Employee employee){
         this.employee = employee;
+    }
+    public void setTotal(int total){
+        this.total = total;
+    }
+    public void setPreparationTime(int totalTime){
+        this.totalTime = totalTime;
     }
     // Methods
     public void appendOrder(OrderProducts order){
