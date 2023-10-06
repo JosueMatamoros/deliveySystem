@@ -35,7 +35,6 @@ public class SocketMain {
         int port = 12345;
         ServerSocket serverSocket = null;
 
-
         try {
             serverSocket = new ServerSocket(port);
             System.out.println("Server waiting for connections on port " + port);
@@ -203,7 +202,7 @@ public class SocketMain {
                                             // THIS SHOULD NOT BE SHOWN ON THE CLIENT SIDE, IT SHOULD GO TO THE RESTAURANT;
                                             confirmation.println("List of orders:");
                                             for (Orders order : orders) {
-                                                confirmation.println(order);
+                                                confirmation.println(order.toStringClient());
                                                 System.out.println(order);
                                             }
 
