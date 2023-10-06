@@ -65,6 +65,10 @@ public class ExpressService extends Person implements Serializable {
         this.vehiculePlate = vehiculePlate;
     }
 
+    public void setVehiculeType(String vehiculeType) {
+        this.vehiculeType = vehiculeType;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();

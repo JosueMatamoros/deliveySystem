@@ -10,6 +10,9 @@ import java.sql.Time;
 import java.time.LocalTime;
 import java.util.ArrayList;
 
+/**
+ * The type Orders.
+ */
 public class Orders implements Serializable {
     // Atributes
     private ArrayList<OrderProducts> order = new ArrayList<OrderProducts>();
@@ -24,17 +27,32 @@ public class Orders implements Serializable {
     private Client client;
     private int orderNumber;
 
+    /**
+     * The Order count.
+     */
     static int orderCount = 199;
 
-    // Constructors
+    /**
+     * Instantiates a new Orders.
+     *
+     * @param order the order
+     */
+// Constructors
     public Orders(ArrayList<OrderProducts> order){
-       // Constructor for orders in the restaurant
+        // Constructor for orders in the restaurant
         this.order = order;
         this.state = "New order";
         this.orderNumber = ++orderCount;
         this.date = new Date(System.currentTimeMillis());
         this.total = 0;
     }
+
+    /**
+     * Instantiates a new Orders.
+     *
+     * @param order      the order
+     * @param pickUpTime the pick up time
+     */
     public Orders(ArrayList<OrderProducts> order, LocalTime pickUpTime){
         // Constructor for orders to go
         this.order = order;
@@ -44,6 +62,13 @@ public class Orders implements Serializable {
         this.date = new Date(System.currentTimeMillis());
     }
 
+    /**
+     * Instantiates a new Orders.
+     *
+     * @param order   the order
+     * @param address the address
+     * @param client  the client
+     */
     public Orders(ArrayList<OrderProducts> order, Address address, Client client){
         // Constructor for orders to deliver
         this.order = order;
@@ -53,60 +78,168 @@ public class Orders implements Serializable {
         this.orderNumber = ++orderCount;
         this.date = new Date(System.currentTimeMillis());
     }
-    // Getter
+
+    /**
+     * Get order array list.
+     *
+     * @return the array list
+     */
+// Getter
     public ArrayList<OrderProducts> getOrder(){
         return this.order;
     }
+
+    /**
+     * Get total int.
+     *
+     * @return the int
+     */
     public int getTotal(){
         return this.total;
     }
+
+    /**
+     * Get date date.
+     *
+     * @return the date
+     */
     public Date getDate(){
         return this.date;
     }
+
+    /**
+     * Get total time int.
+     *
+     * @return the int
+     */
     public int getTotalTime(){
         return this.totalTime;
     }
+
+    /**
+     * Get table number int.
+     *
+     * @return the int
+     */
     public int getTableNumber(){
         return this.tableNumber;
     }
+
+    /**
+     * Get pick up time local time.
+     *
+     * @return the local time
+     */
     public LocalTime getPickUpTime(){
         return this.pickUpTime;
     }
+
+    /**
+     * Get state string.
+     *
+     * @return the string
+     */
     public String getState(){
         return this.state;
     }
+
+    /**
+     * Get employee employee.
+     *
+     * @return the employee
+     */
     public Employee getEmployee(){
         return this.employee;
     }
+
+    /**
+     * Get address address.
+     *
+     * @return the address
+     */
     public Address getAddress(){
         return this.address;
     }
+
+    /**
+     * Get client client.
+     *
+     * @return the client
+     */
     public Client getClient(){
         return this.client;
     }
+
+    /**
+     * Get order number int.
+     *
+     * @return the int
+     */
     public int getOrderNumber(){
         return this.orderNumber;
     }
-    // Setters
+
+    /**
+     * Set state.
+     *
+     * @param state the state
+     */
+// Setters
     public void setState(String state){
         this.state = state;
     }
+
+    /**
+     * Set table number.
+     *
+     * @param tableNumber the table number
+     */
     public void setTableNumber(int tableNumber){
         this.tableNumber = tableNumber;
     }
+
+    /**
+     * Set employee.
+     *
+     * @param employee the employee
+     */
     public void setEmployee(Employee employee){
         this.employee = employee;
     }
+
+    /**
+     * Set total.
+     *
+     * @param total the total
+     */
     public void setTotal(int total){
         this.total = total;
     }
+
+    /**
+     * Set preparation time.
+     *
+     * @param totalTime the total time
+     */
     public void setPreparationTime(int totalTime){
         this.totalTime = totalTime;
     }
-    // Methods
+
+    /**
+     * Append order.
+     *
+     * @param order the order
+     */
+// Methods
     public void appendOrder(OrderProducts order){
         this.order.add(order);
     }
+
+    /**
+     * Remove order.
+     *
+     * @param order the order
+     */
     public void removeOrder(OrderProducts order){
         this.order.remove(order);
     }
@@ -136,6 +269,11 @@ public class Orders implements Serializable {
         return sb.toString();
     }
 
+    /**
+     * To string restaurant string.
+     *
+     * @return the string
+     */
     public String toStringRestaurant(){
 
         StringBuilder sb = new StringBuilder();
@@ -156,6 +294,12 @@ public class Orders implements Serializable {
 
         return sb.toString();
     }
+
+    /**
+     * To string pick up string.
+     *
+     * @return the string
+     */
     public String toStringPickUp(){
 
         StringBuilder sb = new StringBuilder();
@@ -177,6 +321,11 @@ public class Orders implements Serializable {
         return sb.toString();
     }
 
+    /**
+     * To string deliver string.
+     *
+     * @return the string
+     */
     public String toStringDeliver(){
 
         StringBuilder sb = new StringBuilder();
@@ -204,7 +353,11 @@ public class Orders implements Serializable {
     }
 
 
-
+    /**
+     * To string client string.
+     *
+     * @return the string
+     */
     public String toStringClient() {
         StringBuilder sb = new StringBuilder();
         sb.append("Order Information:\n");

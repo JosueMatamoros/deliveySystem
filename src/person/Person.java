@@ -37,4 +37,12 @@ abstract class Person implements Serializable {
     public void setAge(Byte age){
         this.age = age;
     }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
 }

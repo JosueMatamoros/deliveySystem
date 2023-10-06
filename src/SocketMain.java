@@ -24,15 +24,26 @@ import java.time.format.DateTimeParseException;
 import java.util.*;
 
 
+/**
+ * The type Socket main.
+ */
 public class SocketMain {
-    // Restaurant tables
+    /**
+     * The constant table.
+     */
+// Restaurant tables
     static int table = 0;
 
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
         // CREATING THE RESTAURANT SERVER, IS "MAIN" SERVER;
-        int port = 4000;
+        int port = 12345;
         ServerSocket serverSocket = null;
 
         try {
@@ -78,14 +89,14 @@ public class SocketMain {
                         new Product("Vanilla Pudding", "Vanilla pudding with cookies", 6.5, "Desserts", 30),
                         new Product("Apple Crumble", "Warm apple crumble with vanilla ice cream", 18.0, "Desserts", 12),
                         new Product("Mineral Water", "Bottle of mineral water", 1.0, "Beverages", 0),
-                    };
-                    // Discounts
-                    Discounts [] discounts = {new Discounts("Beverages", 10),
+                };
+                // Discounts
+                Discounts [] discounts = {new Discounts("Beverages", 10),
                         new Discounts("Fast Food", 20),
                         new Discounts("Main Course", 15),
                         new Discounts("Kids' Menu", 5),
                         new Discounts("Desserts", 10),
-                    };
+                };
 
                 // Client
                 Address[] addressesList = {
@@ -116,219 +127,219 @@ public class SocketMain {
                 clientArrayList.add(client3);
 
                 // Send the menu to the client
-                    Menu menu = new Menu();
-                    for (Product product : productos) {
-                        menu.appendProduct(product);
-                    }
-                    for (Discounts discount : discounts) {
-                        menu.addDiscount(discount);
-                    }
+                Menu menu = new Menu();
+                for (Product product : productos) {
+                    menu.appendProduct(product);
+                }
+                for (Discounts discount : discounts) {
+                    menu.addDiscount(discount);
+                }
 
-                    objectOutPut.writeObject(menu);
+                objectOutPut.writeObject(menu);
 
-                    // Receive the list of selected products from the client
-                    ArrayList<OrderProducts> selectedProducts = (ArrayList<OrderProducts>) objectInput.readObject();
+                // Receive the list of selected products from the client
+                ArrayList<OrderProducts> selectedProducts = (ArrayList<OrderProducts>) objectInput.readObject();
 
-                    for (OrderProducts product : selectedProducts) {
-                        System.out.println("The client has selected: " + product);
-                    }
+                for (OrderProducts product : selectedProducts) {
+                    System.out.println("The client has selected: " + product);
+                }
 
-                    confirmation.println("Received successfully!");
+                confirmation.println("Received successfully!");
 
-                    boolean finish = false;
-                    ArrayList<Orders> orders = new ArrayList<>();
+                boolean finish = false;
+                ArrayList<Orders> orders = new ArrayList<>();
 
-                    // Add the orders to the list of orders
-                    ArrayList<OrderProducts> burnOrders = new ArrayList<>();
-                    ArrayList<OrderProducts> burnOrdersToPickUp = new ArrayList<>();
-                    ArrayList<OrderProducts> burnOrdersToDeliver = new ArrayList<>();
+                // Add the orders to the list of orders
+                ArrayList<OrderProducts> burnOrders = new ArrayList<>();
+                ArrayList<OrderProducts> burnOrdersToPickUp = new ArrayList<>();
+                ArrayList<OrderProducts> burnOrdersToDeliver = new ArrayList<>();
 
-                    OrderProducts order1 = new OrderProducts(productos[0], 1);
-                    OrderProducts order2 = new OrderProducts(productos[5], 1);
-                    OrderProducts order3 = new OrderProducts(productos[10], 1);
-                    OrderProducts order4 = new OrderProducts(productos[15], 1);
-                    OrderProducts order5 = new OrderProducts(productos[1], 1);
-                    OrderProducts order6 = new OrderProducts(productos[6], 2);
+                OrderProducts order1 = new OrderProducts(productos[0], 1);
+                OrderProducts order2 = new OrderProducts(productos[5], 1);
+                OrderProducts order3 = new OrderProducts(productos[10], 1);
+                OrderProducts order4 = new OrderProducts(productos[15], 1);
+                OrderProducts order5 = new OrderProducts(productos[1], 1);
+                OrderProducts order6 = new OrderProducts(productos[6], 2);
 
-                    // Order of the first client to eat in the restaurant
-                    burnOrders.add(order1);
-                    burnOrders.add(order2);
-                    // Order of the second client to Pick Up
-                    burnOrdersToPickUp.add(order3);
-                    burnOrdersToPickUp.add(order4);
-                    // Order of the third client to deliver
-                    burnOrdersToDeliver.add(order5);
-                    burnOrdersToDeliver.add(order6);
+                // Order of the first client to eat in the restaurant
+                burnOrders.add(order1);
+                burnOrders.add(order2);
+                // Order of the second client to Pick Up
+                burnOrdersToPickUp.add(order3);
+                burnOrdersToPickUp.add(order4);
+                // Order of the third client to deliver
+                burnOrdersToDeliver.add(order5);
+                burnOrdersToDeliver.add(order6);
 
-                    // Add the orders to the list of orders
-                    orders.add(new Orders(burnOrders));
-                    orders.add(new Orders(burnOrdersToPickUp, LocalTime.of(2, 0, 0)));
-                    orders.add(new Orders(burnOrdersToDeliver, new Address("Alajuela", "San Carlos", "San Ramon", "El burrito", "In front of the church") , null));
+                // Add the orders to the list of orders
+                orders.add(new Orders(burnOrders));
+                orders.add(new Orders(burnOrdersToPickUp, LocalTime.of(2, 0, 0)));
+                orders.add(new Orders(burnOrdersToDeliver, new Address("Alajuela", "San Carlos", "San Ramon", "El burrito", "In front of the church") , null));
 
-                    do {
-                        // Send a message to the client
-                        confirmation.println("1. Dine-in 2. Takeout 3. Express Service 4. Exit Option: ");
+                do {
+                    // Send a message to the client
+                    confirmation.println("1. Dine-in 2. Takeout 3. Express Service 4. Exit Option: ");
 
-                        // Read the client's response
-                        String clientResponse = inputBuffer.readLine();
+                    // Read the client's response
+                    String clientResponse = inputBuffer.readLine();
 
-                        if (clientResponse != null && !clientResponse.isEmpty()) {
-                            try {
-                                int option = Integer.parseInt(clientResponse);
-                                switch (option) {
-                                    case 1:
-                                        confirmation.println("The client chose to dine-in\n");
-                                        Orders newOrder = new Orders(selectedProducts);
-                                        orders.add(newOrder);
+                    if (clientResponse != null && !clientResponse.isEmpty()) {
+                        try {
+                            int option = Integer.parseInt(clientResponse);
+                            switch (option) {
+                                case 1:
+                                    confirmation.println("The client chose to dine-in\n");
+                                    Orders newOrder = new Orders(selectedProducts);
+                                    orders.add(newOrder);
+                                    confirmation.println("List of orders:");
+                                    for (Orders order : orders) {
+                                        confirmation.println(order);
+                                    }
+                                    finish = true;
+                                    break;
+                                case 2:
+                                    confirmation.println("The client chose takeout");
+                                    confirmation.println("What time will you pick up your order (HH:mm:ss): ");
+
+                                    try {
+                                        String pickupTimeInput = inputBuffer.readLine();
+
+                                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+                                        LocalTime pickupTime = LocalTime.parse(pickupTimeInput, formatter);
+                                        Orders newOrderPickup = new Orders(selectedProducts, pickupTime);
+
+                                        orders.add(newOrderPickup);
+
+                                        // THIS SHOULD NOT BE SHOWN ON THE CLIENT SIDE, IT SHOULD GO TO THE RESTAURANT;
                                         confirmation.println("List of orders:");
                                         for (Orders order : orders) {
-                                            confirmation.println(order);
-                                        }
-                                        finish = true;
-                                        break;
-                                    case 2:
-                                        confirmation.println("The client chose takeout");
-                                        confirmation.println("What time will you pick up your order (HH:mm:ss): ");
-
-                                        try {
-                                            String pickupTimeInput = inputBuffer.readLine();
-
-                                            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
-                                            LocalTime pickupTime = LocalTime.parse(pickupTimeInput, formatter);
-                                            Orders newOrderPickup = new Orders(selectedProducts, pickupTime);
-
-                                            orders.add(newOrderPickup);
-
-                                            // THIS SHOULD NOT BE SHOWN ON THE CLIENT SIDE, IT SHOULD GO TO THE RESTAURANT;
-                                            confirmation.println("List of orders:");
-                                            for (Orders order : orders) {
-                                                confirmation.println(order.toStringClient());
-                                                System.out.println(order);
-                                            }
-
-                                        } catch (DateTimeParseException e) {
-                                            // Handle the exception if the time format is incorrect
-                                            confirmation.println("Error: The time format is incorrect. It should be HH:mm:ss.");
-                                        } catch (IOException e) {
-                                            e.printStackTrace();
-                                        } catch (Exception e) {
-                                            // Handle any other unspecified exception
-                                            e.printStackTrace(); // You can customize how to handle this error
+                                            confirmation.println(order.toStringClient());
+                                            System.out.println(order);
                                         }
 
-                                        finish = true;
-                                        break;
-                                    case 3:
-                                        confirmation.println("The client chose express service");
-                                        confirmation.println("Are you a frequent customer? (y/n) ");
-                                        String frequentCustomerResponse = inputBuffer.readLine();
+                                    } catch (DateTimeParseException e) {
+                                        // Handle the exception if the time format is incorrect
+                                        confirmation.println("Error: The time format is incorrect. It should be HH:mm:ss.");
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    } catch (Exception e) {
+                                        // Handle any other unspecified exception
+                                        e.printStackTrace(); // You can customize how to handle this error
+                                    }
 
-                                        if (frequentCustomerResponse.equalsIgnoreCase("y")) {
+                                    finish = true;
+                                    break;
+                                case 3:
+                                    confirmation.println("The client chose express service");
+                                    confirmation.println("Are you a frequent customer? (y/n) ");
+                                    String frequentCustomerResponse = inputBuffer.readLine();
+
+                                    if (frequentCustomerResponse.equalsIgnoreCase("y")) {
+                                        confirmation.println("The client is a frequent customer");
+                                        confirmation.println("Enter your full name: ");
+                                        String fullName = inputBuffer.readLine();
+
+                                        Client clientOne = null;
+                                        if(searchClient(clientArrayList, fullName)){
                                             confirmation.println("The client is a frequent customer");
-                                            confirmation.println("Enter your full name: ");
-                                            String fullName = inputBuffer.readLine();
-
-                                            Client clientOne = null;
-                                            if(searchClient(clientArrayList, fullName)){
-                                                confirmation.println("The client is a frequent customer");
-                                                for (Client client : clientArrayList) {
-                                                    if (client.getFullName().equalsIgnoreCase(fullName)){
-                                                        clientOne = new Client(client.getFullName(), client.getPhone(), client.getGender(), client.getAge(), client.getAddresses());
-                                                        Orders newOrderExpress = new Orders(selectedProducts, null, clientOne);
-                                                        orders.add(newOrderExpress);
-                                                        finish = true;
-                                                    } else {
-                                                        continue;
-                                                    }
+                                            for (Client client : clientArrayList) {
+                                                if (client.getFullName().equalsIgnoreCase(fullName)){
+                                                    clientOne = new Client(client.getFullName(), client.getPhone(), client.getGender(), client.getAge(), client.getAddresses());
+                                                    Orders newOrderExpress = new Orders(selectedProducts, null, clientOne);
+                                                    orders.add(newOrderExpress);
+                                                    finish = true;
+                                                } else {
+                                                    continue;
                                                 }
-
-                                            } else {
-                                                finish = false;
                                             }
 
-                                            if (clientOne != null) {
-                                                confirmation.println("You're a frequent dates: " + fullName + " " + "and your address are: " + clientOne.getAddresses());
-                                            } else {
-                                                confirmation.println("You're not a frequent customer");
-                                            }
-                                        } else if (frequentCustomerResponse.equalsIgnoreCase("n")) {
-                                            confirmation.println("The client is not a frequent customer");
-
-                                            confirmation.println("Enter your full name: ");
-                                            String fullName = inputBuffer.readLine();
-                                            confirmation.println("Enter your phone number: ");
-                                            String phoneNumber = inputBuffer.readLine();
-                                            confirmation.println("Enter your gender: ");
-                                            String gender = inputBuffer.readLine();
-                                            confirmation.println("Enter your age: ");
-                                            Byte age = Byte.parseByte(inputBuffer.readLine());
-
-                                            confirmation.println("Now, let's fill in your address: ");
-                                            confirmation.println("Enter your province: ");
-                                            String province = inputBuffer.readLine();
-                                            confirmation.println("Enter your canton: ");
-                                            String canton = inputBuffer.readLine();
-                                            confirmation.println("Enter your district: ");
-                                            String district = inputBuffer.readLine();
-                                            confirmation.println("Enter your exact address: ");
-                                            String exactAddress = inputBuffer.readLine();
-                                            confirmation.println("Description: ");
-                                            String descriptionAddress = inputBuffer.readLine();
-
-                                            Address address = new Address(province, canton, district, exactAddress, descriptionAddress);
-                                            ArrayList<Address> addresses = new ArrayList<>();
-                                            addresses.add(address);
-
-                                            Client client = new Client(fullName, phoneNumber, gender, age, addresses);
-                                            System.out.println("Full name client is: " + client.getFullName());
-                                            Orders newOrderExpress = new Orders(selectedProducts, null, client);
-                                            orders.add(newOrderExpress);
-                                            confirmation.println("List of orders:");
-                                            for (Orders order : orders) {
-                                                confirmation.println(order.toString());
-                                            }
-                                            finish = true;
                                         } else {
-                                            confirmation.println("The client sent an invalid response.");
                                             finish = false;
                                         }
 
-                                        break;
-                                    case 4:
-                                        confirmation.println("The client chose to exit");
-                                        break;
-                                    default:
-                                        confirmation.println("The client chose an invalid option");
-                                        break;
-                                }
-                            } catch (NumberFormatException e) {
-                                // Handle the error if 'clientResponse' is not a valid number
-                                confirmation.println("The client sent an invalid option.");
+                                        if (clientOne != null) {
+                                            confirmation.println("You're a frequent dates: " + fullName + " " + "and your address are: " + clientOne.getAddresses());
+                                        } else {
+                                            confirmation.println("You're not a frequent customer");
+                                        }
+                                    } else if (frequentCustomerResponse.equalsIgnoreCase("n")) {
+                                        confirmation.println("The client is not a frequent customer");
+
+                                        confirmation.println("Enter your full name: ");
+                                        String fullName = inputBuffer.readLine();
+                                        confirmation.println("Enter your phone number: ");
+                                        String phoneNumber = inputBuffer.readLine();
+                                        confirmation.println("Enter your gender: ");
+                                        String gender = inputBuffer.readLine();
+                                        confirmation.println("Enter your age: ");
+                                        Byte age = Byte.parseByte(inputBuffer.readLine());
+
+                                        confirmation.println("Now, let's fill in your address: ");
+                                        confirmation.println("Enter your province: ");
+                                        String province = inputBuffer.readLine();
+                                        confirmation.println("Enter your canton: ");
+                                        String canton = inputBuffer.readLine();
+                                        confirmation.println("Enter your district: ");
+                                        String district = inputBuffer.readLine();
+                                        confirmation.println("Enter your exact address: ");
+                                        String exactAddress = inputBuffer.readLine();
+                                        confirmation.println("Description: ");
+                                        String descriptionAddress = inputBuffer.readLine();
+
+                                        Address address = new Address(province, canton, district, exactAddress, descriptionAddress);
+                                        ArrayList<Address> addresses = new ArrayList<>();
+                                        addresses.add(address);
+
+                                        Client client = new Client(fullName, phoneNumber, gender, age, addresses);
+                                        System.out.println("Full name client is: " + client.getFullName());
+                                        Orders newOrderExpress = new Orders(selectedProducts, null, client);
+                                        orders.add(newOrderExpress);
+                                        confirmation.println("List of orders:");
+                                        for (Orders order : orders) {
+                                            confirmation.println(order.toString());
+                                        }
+                                        finish = true;
+                                    } else {
+                                        confirmation.println("The client sent an invalid response.");
+                                        finish = false;
+                                    }
+
+                                    break;
+                                case 4:
+                                    confirmation.println("The client chose to exit");
+                                    break;
+                                default:
+                                    confirmation.println("The client chose an invalid option");
+                                    break;
                             }
-                        } else {
-                            // Handle the case where the response is empty or null
-                            confirmation.println("The client sent an empty or null response.");
+                        } catch (NumberFormatException e) {
+                            // Handle the error if 'clientResponse' is not a valid number
+                            confirmation.println("The client sent an invalid option.");
                         }
+                    } else {
+                        // Handle the case where the response is empty or null
+                        confirmation.println("The client sent an empty or null response.");
+                    }
 
-                    } while (!finish);
+                } while (!finish);
 
-                    // Address
-                    person.aggregated.Address address = new person.aggregated.Address("Alajuela", "Penas Blancas", "San Ramon", "Chachagua", "In front of the church");
-                    person.aggregated.Address address1 = new person.aggregated.Address("Alajuela", "Penas Blancas", "San Ramon", "Calle Pechuga", "Close to the school");
-                    person.aggregated.Address address2 = new person.aggregated.Address("Alajuela", "San Carlos", "San Ramon", "El burrito", "Next to the park");
+                // Address
+                person.aggregated.Address address = new person.aggregated.Address("Alajuela", "Penas Blancas", "San Ramon", "Chachagua", "In front of the church");
+                person.aggregated.Address address1 = new person.aggregated.Address("Alajuela", "Penas Blancas", "San Ramon", "Calle Pechuga", "Close to the school");
+                person.aggregated.Address address2 = new person.aggregated.Address("Alajuela", "San Carlos", "San Ramon", "El burrito", "Next to the park");
 
-                    // First Client
-                    ArrayList<person.aggregated.Address> addresses = new ArrayList<>();
-                    addresses.add(address);
-                    addresses.add(address1);
-                    // Second Client
-                    ArrayList<person.aggregated.Address> addresses1 = new ArrayList<>();
-                    addresses1.add(address2);
+                // First Client
+                ArrayList<person.aggregated.Address> addresses = new ArrayList<>();
+                addresses.add(address);
+                addresses.add(address1);
+                // Second Client
+                ArrayList<person.aggregated.Address> addresses1 = new ArrayList<>();
+                addresses1.add(address2);
 
-                    // Clients
-                    ArrayList<Client> clients = new ArrayList<>();
-                    clients.add(new Client("Kenny Rofrigues","+506 7296 8552", "Male", (byte)21, addresses));
-                    clients.add(new Client("Asdrubal Ulate", "+506 8850 9804","Male", (byte)21, addresses1));
+                // Clients
+                ArrayList<Client> clients = new ArrayList<>();
+                clients.add(new Client("Kenny Rofrigues","+506 7296 8552", "Male", (byte)21, addresses));
+                clients.add(new Client("Asdrubal Ulate", "+506 8850 9804","Male", (byte)21, addresses1));
 
                 int opcion = 0;
                 do {
@@ -692,78 +703,78 @@ public class SocketMain {
                                                 }
                                                 break;
                                             case 2:
-                                               try {
-                                                   System.out.println("Orders");
-                                                   for (Orders order : orders) {
-                                                       if (order.getState().equals("New order")){
-                                                           System.out.println(order.getOrderNumber());
-                                                           for (OrderProducts orderProducts : order.getOrder()) {
-                                                               System.out.println(orderProducts.toString());
-                                                           }
-                                                       }
+                                                try {
+                                                    System.out.println("Orders");
+                                                    for (Orders order : orders) {
+                                                        if (order.getState().equals("New order")){
+                                                            System.out.println(order.getOrderNumber());
+                                                            for (OrderProducts orderProducts : order.getOrder()) {
+                                                                System.out.println(orderProducts.toString());
+                                                            }
+                                                        }
 
-                                                   }
-                                                   System.out.println("Select the order to start");
-                                                   int orderNumber = scanner.nextInt();
+                                                    }
+                                                    System.out.println("Select the order to start");
+                                                    int orderNumber = scanner.nextInt();
 
-                                                   // Check if the order is on another state
-                                                   boolean orderAlreadyStarted = false;
-                                                   for (Orders order : orders) {
-                                                       if (!order.getState().equals("New order") && order.getOrderNumber() == orderNumber){
-                                                           System.out.println("Order already started");
-                                                           orderAlreadyStarted = true;
-                                                           break;
-                                                       }
-                                                   }
-                                                   if (orderAlreadyStarted){
-                                                       break;
-                                                   }
-                                                   scanner.nextLine(); // Clean the buffer
+                                                    // Check if the order is on another state
+                                                    boolean orderAlreadyStarted = false;
+                                                    for (Orders order : orders) {
+                                                        if (!order.getState().equals("New order") && order.getOrderNumber() == orderNumber){
+                                                            System.out.println("Order already started");
+                                                            orderAlreadyStarted = true;
+                                                            break;
+                                                        }
+                                                    }
+                                                    if (orderAlreadyStarted){
+                                                        break;
+                                                    }
+                                                    scanner.nextLine(); // Clean the buffer
 
-                                                   // Search the order
-                                                   boolean orderFound = false;
-                                                   for (Orders order : orders) {
-                                                       if (order.getOrderNumber() == orderNumber){
-                                                           order.setTableNumber(++table);
-                                                           // Chose the employee
-                                                           System.out.println("Employees");
-                                                           int i = 0;
-                                                           for (Employee employee : employees) {
-                                                               System.out.print(++i + ". ");
-                                                               System.out.print(employee.getFullName());
-                                                               System.out.print(" -> ");
-                                                               System.out.print(employee.getJob());
-                                                               if (employee.getState()){
-                                                                   System.out.print(" -> ");
-                                                                   System.out.print("Not Available");
-                                                               }
-                                                               System.out.println(" ");
-                                                           }
-                                                           System.out.println("Select the employee");
-                                                           int employeeNumber = scanner.nextInt();
-                                                           if (employees.get(employeeNumber - 1).getState()){
-                                                               System.out.println("Employee not available");
-                                                               break;
-                                                           }
-                                                           // Mark the employee as not available
-                                                           employees.get(employeeNumber - 1).setState(true);
+                                                    // Search the order
+                                                    boolean orderFound = false;
+                                                    for (Orders order : orders) {
+                                                        if (order.getOrderNumber() == orderNumber){
+                                                            order.setTableNumber(++table);
+                                                            // Chose the employee
+                                                            System.out.println("Employees");
+                                                            int i = 0;
+                                                            for (Employee employee : employees) {
+                                                                System.out.print(++i + ". ");
+                                                                System.out.print(employee.getFullName());
+                                                                System.out.print(" -> ");
+                                                                System.out.print(employee.getJob());
+                                                                if (employee.getState()){
+                                                                    System.out.print(" -> ");
+                                                                    System.out.print("Not Available");
+                                                                }
+                                                                System.out.println(" ");
+                                                            }
+                                                            System.out.println("Select the employee");
+                                                            int employeeNumber = scanner.nextInt();
+                                                            if (employees.get(employeeNumber - 1).getState()){
+                                                                System.out.println("Employee not available");
+                                                                break;
+                                                            }
+                                                            // Mark the employee as not available
+                                                            employees.get(employeeNumber - 1).setState(true);
 
-                                                           // Add the employee to the order
-                                                           order.setEmployee(employees.get(employeeNumber - 1));
-                                                           order.setState("In the kitchen");
-                                                           System.out.println("Order started");
-                                                           orderFound = true;
-                                                           break;
-                                                       }
+                                                            // Add the employee to the order
+                                                            order.setEmployee(employees.get(employeeNumber - 1));
+                                                            order.setState("In the kitchen");
+                                                            System.out.println("Order started");
+                                                            orderFound = true;
+                                                            break;
+                                                        }
 
-                                                   }
-                                                   if (!orderFound){
-                                                       System.out.println("Order not found");
-                                                   }
-                                               }catch (Exception e) {
-                                                   System.out.println("Invalid option");
-                                                   scanner.nextLine();
-                                               }
+                                                    }
+                                                    if (!orderFound){
+                                                        System.out.println("Order not found");
+                                                    }
+                                                }catch (Exception e) {
+                                                    System.out.println("Invalid option");
+                                                    scanner.nextLine();
+                                                }
                                                 break;
                                             case 3:
                                                 System.out.println("Orders");
@@ -934,15 +945,15 @@ public class SocketMain {
                                         int quantityOrders = 0;
                                         for (Orders order : orders) {
                                             if (order.getState().equalsIgnoreCase("Ready")) {
-                                            totalSales += order.getTotal();
-                                            for (OrderProducts orderProducts : order.getOrder()) {
-                                                quantityOrders = orderProducts.getQuantity();
-                                                for (Product product : menu.getProducts()) {
-                                                    if (orderProducts.getProduct().getName().equals(product.getName())) {
-                                                        product.setQuantityPerDay(quantityOrders);
+                                                totalSales += order.getTotal();
+                                                for (OrderProducts orderProducts : order.getOrder()) {
+                                                    quantityOrders = orderProducts.getQuantity();
+                                                    for (Product product : menu.getProducts()) {
+                                                        if (orderProducts.getProduct().getName().equals(product.getName())) {
+                                                            product.setQuantityPerDay(quantityOrders);
+                                                        }
                                                     }
                                                 }
-                                            }
                                             }
                                         }
                                         System.out.println("Date:" + orders.get(2).getDate());
@@ -967,8 +978,8 @@ public class SocketMain {
                                         // Incluir segundo reporte aqui
                                         break;
                                     case 3:
-                                       System.out.println("Orders");
-                                       System.out.println("\n");
+                                        System.out.println("Orders");
+                                        System.out.println("\n");
                                         for (Orders order : orders) {
                                             if (order.getState().equals("Ready")){
                                                 if (order.getClient() != null){
@@ -1009,6 +1020,12 @@ public class SocketMain {
         }
 
     }
+
+    /**
+     * Input address address.
+     *
+     * @return the address
+     */
     public static Address inputAddress() {
         Scanner scanner = new Scanner(System.in);
 
@@ -1026,6 +1043,13 @@ public class SocketMain {
         return new Address(province, district, canton, exactAddress, description);
     }
 
+    /**
+     * Search client boolean.
+     *
+     * @param clients the clients
+     * @param name    the name
+     * @return the boolean
+     */
     public static boolean searchClient(ArrayList<Client> clients, String name){
         for (Client client : clients) {
             if (client.getFullName().equalsIgnoreCase(name)){

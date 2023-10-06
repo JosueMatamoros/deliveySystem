@@ -13,10 +13,22 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
+/**
+ * The type Socket client.
+ */
 // THIS IS THE APP THAT SHOULD SEND DATA TO THE SERVER
 public class SocketClient {
+    /**
+     * The constant input.
+     */
     public static Scanner input = new Scanner(System.in);
 
+    /**
+     * Is valid time boolean.
+     *
+     * @param timeString the time string
+     * @return the boolean
+     */
     public static boolean isValidTime(String timeString) {
 
         String regex = "^([0-1]?[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$";
@@ -25,6 +37,14 @@ public class SocketClient {
 
         return matcher.matches();
     }
+
+    /**
+     * Send information.
+     *
+     * @throws IOException            the io exception
+     * @throws InputMismatchException the input mismatch exception
+     * @throws ClassNotFoundException the class not found exception
+     */
     public static void sendInformation() throws IOException, InputMismatchException, ClassNotFoundException {
         String serverIP = "127.0.0.1";
         int port = 12345;
@@ -204,6 +224,14 @@ public class SocketClient {
             e.printStackTrace();
         } while (true);
     }
+
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     * @throws ClassNotFoundException the class not found exception
+     * @throws ConnectException       the connect exception
+     */
     public static void main(String[] args) throws ClassNotFoundException, ConnectException {
 
         while (true) try {
