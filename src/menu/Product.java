@@ -3,6 +3,9 @@ package menu;
 import java.io.Serializable;
 
 
+/**
+ * The type Product.
+ */
 public class Product implements Serializable {
     // Attributes
     private String name;
@@ -12,7 +15,16 @@ public class Product implements Serializable {
     private double preparationTime;
     private int quantityPerDay;
 
-    // Constructor
+    /**
+     * Instantiates a new Product.
+     *
+     * @param name            the name
+     * @param description     the description
+     * @param price           the price
+     * @param category        the category
+     * @param preparationTime the preparation time
+     */
+// Constructor
     public Product(String name, String description, double price, String category, double preparationTime){
         this.name = name;
         this.description = description;
@@ -20,36 +32,95 @@ public class Product implements Serializable {
         this.category = category;
         this.preparationTime = preparationTime;
     }
-    // Getters
+
+    /**
+     * Get name string.
+     *
+     * @return the string
+     */
+// Getters
     public String getName(){
         return this.name;
     }
+
+    /**
+     * Get description string.
+     *
+     * @return the string
+     */
     public String getDescription(){
         return this.description;
     }
+
+    /**
+     * Get price double.
+     *
+     * @return the double
+     */
     public double getPrice(){
         return this.price;
     }
+
+    /**
+     * Get category string.
+     *
+     * @return the string
+     */
     public String getCategory(){
         return this.category;
     }
+
+    /**
+     * Get quantity per day int.
+     *
+     * @return the int
+     */
     public int getQuantityPerDay(){
         return this.quantityPerDay;
     }
 
+    /**
+     * Get preparation time double.
+     *
+     * @return the double
+     */
     public double getPreparationTime(){
         return this.preparationTime;
     }
-    // Setters
+
+    /**
+     * Set name.
+     *
+     * @param name the name
+     */
+// Setters
     public void setName(String name){
         this.name = name;
     }
+
+    /**
+     * Set description.
+     *
+     * @param description the description
+     */
     public void setDescription(String description){
         this.description = description;
     }
+
+    /**
+     * Set price.
+     *
+     * @param price the price
+     */
     public void setPrice(double price){
         this.price = price;
     }
+
+    /**
+     * Set quantity per day.
+     *
+     * @param quantityPerDay the quantity per day
+     */
     public void setQuantityPerDay(int quantityPerDay){
         this.quantityPerDay += quantityPerDay;
     }

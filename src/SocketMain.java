@@ -24,15 +24,26 @@ import java.time.format.DateTimeParseException;
 import java.util.*;
 
 
+/**
+ * The type Socket main.
+ */
 public class SocketMain {
-    // Restaurant tables
+    /**
+     * The constant table.
+     */
+// Restaurant tables
     static int table = 0;
 
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
         // CREATING THE RESTAURANT SERVER, IS "MAIN" SERVER;
-        int port = 4000;
+        int port = 12345;
         ServerSocket serverSocket = null;
 
         try {
@@ -1009,6 +1020,12 @@ public class SocketMain {
         }
 
     }
+
+    /**
+     * Input address address.
+     *
+     * @return the address
+     */
     public static Address inputAddress() {
         Scanner scanner = new Scanner(System.in);
 
@@ -1026,6 +1043,13 @@ public class SocketMain {
         return new Address(province, district, canton, exactAddress, description);
     }
 
+    /**
+     * Search client boolean.
+     *
+     * @param clients the clients
+     * @param name    the name
+     * @return the boolean
+     */
     public static boolean searchClient(ArrayList<Client> clients, String name){
         for (Client client : clients) {
             if (client.getFullName().equalsIgnoreCase(name)){

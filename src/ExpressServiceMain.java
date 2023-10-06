@@ -4,9 +4,18 @@ import person.ExpressService;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+/**
+ * The type Express service main.
+ */
 public class ExpressServiceMain {
+    /**
+     * The constant input.
+     */
     public static Scanner input = new Scanner(System.in);
 
+    /**
+     * Show menu express.
+     */
     public static void showMenuExpress() {
         System.out.println("1. Show orders");
         System.out.println("2. Assigment express service");
@@ -14,6 +23,11 @@ public class ExpressServiceMain {
         System.out.println("4. Exit");
     }
 
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
     public static void main(String[] args) {
         ArrayList<ExpressService> expressServicesEntities = new ArrayList<>();
 
