@@ -1,6 +1,8 @@
 package person;
 
-public class Employee extends Person{
+import java.io.Serializable;
+
+public class Employee extends Person implements Serializable {
     private String job;
     private int salary;
     private Boolean state;

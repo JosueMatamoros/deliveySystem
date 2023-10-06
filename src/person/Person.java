@@ -1,6 +1,8 @@
 package person;
 
-abstract class Person {
+import java.io.Serializable;
+
+abstract class Person implements Serializable {
     // Attributes
     private String fullName;
     private String phone;

@@ -1,6 +1,8 @@
 package person.aggregated;
 
-public class Address {
+import java.io.Serializable;
+
+public class Address implements Serializable {
     // Attributes
     private String province;
     private String district;

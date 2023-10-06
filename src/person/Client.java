@@ -1,8 +1,9 @@
 package person;
+import java.io.Serializable;
 import java.util.ArrayList;
 import person.aggregated.Address;
 
-public class Client extends Person{
+public class Client extends Person implements Serializable {
     // Attributes
     private ArrayList<Address> addresses = new ArrayList<Address>();
 

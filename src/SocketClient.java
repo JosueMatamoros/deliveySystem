@@ -47,112 +47,122 @@ public class SocketClient {
                 // Send the first string (order identifier) to the server
                 ArrayList<OrderProducts> selectedProducts = new ArrayList<>(); // STORE WHAT THE CLIENT SELECTS;
 
-                while (true) {
-                    System.out.println("Select a product by number (or enter 0 to finish):");
-                    int option = input.nextInt();
+                boolean finished = false;
+                do {
+                    try {
+                        System.out.println("Select a product by number (or enter 0 to finish):");
+                        int option = input.nextInt();
 
-                    if (option == 0) {
-                        break; // The user has finished selecting products
-                    }
+                        if (option == 0) {
+                            finished = true;
+                        } else if (option >= 1 && option <= menu.getProducts().size()) {
+                            Product selectedProduct = menu.getProducts().get(option - 1);
 
-                    if (option >= 1 && option <= menu.getProducts().size()) {
-                        Product selectedProduct = menu.getProducts().get(option - 1);
-
-                        System.out.println("Desired quantity:");
-                        int quantity = input.nextInt();
-                        if (quantity <= 0) {
-                            System.out.println("The quantity of selected products cannot be 0 or negative!");
+                            System.out.println("Desired quantity:");
+                            int quantity = input.nextInt();
+                            if (quantity <= 0) {
+                                System.out.println("The quantity of selected products cannot be 0 or negative!");
+                            } else {
+                                // Add the product and quantity to selectedProducts
+                                selectedProducts.add(new OrderProducts(selectedProduct, quantity));
+                            }
                         } else {
-                            // Add the product and quantity to selectedProducts
-                            selectedProducts.add(new OrderProducts(selectedProduct, quantity));
+                            System.out.println("Invalid option. Please select a valid product number.");
+                            // Limpiar la entrada incorrecta
+                            input.nextLine();
                         }
-                    } else {
+                    } catch (Exception e) {
                         System.out.println("Invalid option. Please select a valid product number.");
+                        // Limpiar la entrada incorrecta
+                        input.nextLine();
                     }
-                }
+                } while (!finished);
 
                 // Send the list of selected products to the server
                 objectOutput.writeObject(selectedProducts);
 
-                try {
-                    String confirmation;
-                    while ((confirmation = inputReader.readLine()) != null) {
-                        System.out.println("Server: " + confirmation);
+                // Receive the order identifier from the server
+                finished = false;
+                do {
+                    try {
+                        String confirmation;
+                        while ((confirmation = inputReader.readLine()) != null) {
+                            System.out.println("Server: " + confirmation);
 
-                        if (confirmation.contains("Option:")) {
-                            input.nextLine();
-                            System.out.print("Client: ");
-                            int clientResponse = input.nextInt();
-                            outputWriter.println(clientResponse);
+                            if (confirmation.contains("Option:")) {
+                                input.nextLine();
+                                System.out.print("Client: ");
+                                int clientResponse = input.nextInt();
+                                outputWriter.println(clientResponse);
+                            }
+
+                            if (confirmation.contains("(HH:mm:ss):")){
+                                System.out.print("Client: ");
+                                input.nextLine();
+                                String pickupTimeInput = input.nextLine();
+                                outputWriter.println(pickupTimeInput);
+                            }
+
+                            if (confirmation.contains("express")) {
+                                System.out.println("Server: " + inputReader.readLine());
+                                System.out.println("Client: ");
+                                input.nextLine();
+                                String frequentClient = input.nextLine();
+                                outputWriter.println(frequentClient);
+                            }
+
+                            if (confirmation.contains("Enter your full name:")) {
+                                String clientResponse = input.nextLine();
+                                outputWriter.println(clientResponse);
+                            }
+
+                            if (confirmation.contains("Enter your phone number:")) {
+                                String clientResponse = input.nextLine();
+                                outputWriter.println(clientResponse);
+                            }
+
+                            if (confirmation.contains("Enter your gender:")) {
+                                String clientResponse = input.nextLine();
+                                outputWriter.println(clientResponse);
+                            }
+
+                            if (confirmation.contains("Enter your age:")) {
+                                String clientResponse = input.nextLine();
+                                outputWriter.println(clientResponse);
+                            }
+
+                            if (confirmation.contains("Enter your province:")) {
+                                String clientResponse = input.nextLine();
+                                outputWriter.println(clientResponse);
+                            }
+
+                            if (confirmation.contains("Enter your canton:")) {
+                                String clientResponse = input.nextLine();
+                                outputWriter.println(clientResponse);
+                            }
+
+                            if (confirmation.contains("Enter your district:")) {
+                                String clientResponse = input.nextLine();
+                                outputWriter.println(clientResponse);
+                            }
+
+                            if (confirmation.contains("Enter your exact address:")) {
+                                String clientResponse = input.nextLine();
+                                outputWriter.println(clientResponse);
+                            }
+
+                            if (confirmation.contains("Description:")) {
+                                String clientResponse = input.nextLine();
+                                outputWriter.println(clientResponse);
+                            }
+
                         }
-
-                        if (confirmation.contains("(HH:mm:ss):")){
-                            System.out.print("Client: ");
-                            input.nextLine();
-                            String pickupTimeInput = input.nextLine();
-                            outputWriter.println(pickupTimeInput);
-                        }
-
-                        if (confirmation.contains("express")) {
-                            System.out.println("Server: " + inputReader.readLine());
-                            System.out.println("Client: ");
-                            input.nextLine();
-                            String frequentClient = input.nextLine();
-                            outputWriter.println(frequentClient);
-                        }
-
-                        if (confirmation.contains("Enter your full name:")) {
-                            String clientResponse = input.nextLine();
-                            outputWriter.println(clientResponse);
-                        }
-
-                        if (confirmation.contains("Enter your phone number:")) {
-                            String clientResponse = input.nextLine();
-                            outputWriter.println(clientResponse);
-                        }
-
-                        if (confirmation.contains("Enter your gender:")) {
-                            String clientResponse = input.nextLine();
-                            outputWriter.println(clientResponse);
-                        }
-
-                        if (confirmation.contains("Enter your age:")) {
-                            String clientResponse = input.nextLine();
-                            outputWriter.println(clientResponse);
-                        }
-
-                        if (confirmation.contains("Enter your province:")) {
-                            String clientResponse = input.nextLine();
-                            outputWriter.println(clientResponse);
-                        }
-
-                        if (confirmation.contains("Enter your canton:")) {
-                            String clientResponse = input.nextLine();
-                            outputWriter.println(clientResponse);
-                        }
-
-                        if (confirmation.contains("Enter your district:")) {
-                            String clientResponse = input.nextLine();
-                            outputWriter.println(clientResponse);
-                        }
-
-                        if (confirmation.contains("Enter your exact address:")) {
-                            String clientResponse = input.nextLine();
-                            outputWriter.println(clientResponse);
-                        }
-
-                        if (confirmation.contains("Description:")) {
-                            String clientResponse = input.nextLine();
-                            outputWriter.println(clientResponse);
-                        }
-
+                    } catch (SocketException se) {
+                        System.out.println("Client disconnected.");
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
-                } catch (SocketException se) {
-                    // Handle the closed socket exception (client disconnected)
-                    System.out.println("Client disconnected.");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                } while(!finished);
 
                 // Close the connection with the server
                 clientSocket.close();
@@ -166,7 +176,7 @@ public class SocketClient {
             }
         } while (true);
     }
-    public static void main(String[] args) throws ClassNotFoundException {
+    public static void main(String[] args) throws ClassNotFoundException, ConnectException {
 
         do {
             try {

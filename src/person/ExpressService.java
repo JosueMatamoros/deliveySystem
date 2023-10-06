@@ -1,6 +1,8 @@
 package person;
 
-public class ExpressService extends Person {
+import java.io.Serializable;
+
+public class ExpressService extends Person implements Serializable {
     // Attributes
     private String entityName;
     private String identification;

@@ -4,12 +4,13 @@ import person.Client;
 import person.Employee;
 import person.aggregated.Address;
 
+import java.io.Serializable;
 import java.sql.Date;
 import java.sql.Time;
 import java.time.LocalTime;
 import java.util.ArrayList;
 
-public class Orders {
+public class Orders implements Serializable {
     // Atributes
     private ArrayList<OrderProducts> order = new ArrayList<OrderProducts>();
     private int total;

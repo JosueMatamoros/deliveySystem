@@ -190,6 +190,7 @@ public class SocketMain {
                                     case 2:
                                         confirmation.println("The client chose takeout");
                                         confirmation.println("What time will you pick up your order (HH:mm:ss): ");
+
                                         try {
                                             String pickupTimeInput = inputBuffer.readLine();
 
@@ -890,4 +891,5 @@ public class SocketMain {
         }
         return false;
     }
+
 }
