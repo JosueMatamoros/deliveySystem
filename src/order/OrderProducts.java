@@ -6,9 +6,9 @@ import menu.Product;
 
 public class OrderProducts implements Serializable {
     // Attributes
-    private Product product;
+    private final Product product;
     private int quantity;
-    private double subtotal;
+    private final double subtotal;
     private Boolean state;
 
     // Constructor

@@ -167,7 +167,6 @@ public class SocketClient {
         } while (true);
     }
     public static void main(String[] args) throws ClassNotFoundException {
-
         do {
             try {
                 System.out.println("PLEASE PRESS ENTER");

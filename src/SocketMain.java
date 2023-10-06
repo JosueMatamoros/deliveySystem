@@ -338,7 +338,8 @@ public class SocketMain {
                     System.out.println("2. Edit Clients");
                     System.out.println("3. Edit Employees");
                     System.out.println("4. Orders Administration");
-                    System.out.println("5. Exit");
+                    System.out.println("5. Reports");
+                    System.out.println("6. Exit");
                     try {
                         // Get the option
                         opcion = scanner.nextInt();
@@ -658,6 +659,23 @@ public class SocketMain {
                                             case 1:
                                                 System.out.println("Orders");
                                                 for (Orders order : orders) {
+                                                    if (order.getTotal() == 0){
+                                                        double cont = 0;
+                                                        int discontPercentage = 0;
+                                                        int preparationTime = 0;
+                                                        for (OrderProducts orderProducts : order.getOrder()) {
+                                                            for (Discounts discount : menu.getDiscounts()) {
+                                                                if (orderProducts.getProduct().getCategory().equals(discount.getCategory())){
+                                                                    discontPercentage = discount.getDiscount();
+                                                                    break;
+                                                                }
+                                                            }
+                                                            cont += orderProducts.getProduct().getPrice() * orderProducts.getQuantity() * (1 - discontPercentage / 100.0);
+                                                            preparationTime += (int) orderProducts.getProduct().getPreparationTime();
+                                                        }
+                                                        order.setTotal(cont);
+                                                        order.setPreparationTime(preparationTime);
+                                                    }
                                                     if (order.getAddress() != null || order.getClient() != null){
                                                         // Order to deliver
                                                         System.out.println(order.toStringDeliver());
@@ -665,9 +683,7 @@ public class SocketMain {
                                                         // Order to go
                                                         System.out.println(order.toStringPickUp());
                                                     } else {
-                                                        // Order in the restaurant
-                                                        System.out.println(order);
-
+                                                        // Order to eat in the restaurant
                                                         System.out.println(order.toStringRestaurant());
                                                     }
                                                 }
@@ -705,7 +721,6 @@ public class SocketMain {
                                                    boolean orderFound = false;
                                                    for (Orders order : orders) {
                                                        if (order.getOrderNumber() == orderNumber){
-                                                           order.setState("In process");
                                                            order.setTableNumber(++table);
                                                            // Chose the employee
                                                            System.out.println("Employees");
@@ -715,10 +730,22 @@ public class SocketMain {
                                                                System.out.print(employee.getFullName());
                                                                System.out.print(" -> ");
                                                                System.out.print(employee.getJob());
+                                                               if (employee.getState()){
+                                                                     System.out.print(" -> ");
+                                                                        System.out.print("Not Available");
+                                                               }
                                                                System.out.println(" ");
                                                            }
                                                            System.out.println("Select the employee");
                                                            int employeeNumber = scanner.nextInt();
+                                                           if (employees.get(employeeNumber - 1).getState()){
+                                                               System.out.println("Employee not available");
+                                                               break;
+                                                           }
+                                                           // Mark the employee as not available
+                                                           employees.get(employeeNumber - 1).setState(true);
+
+                                                           // Add the employee to the order
                                                            order.setEmployee(employees.get(employeeNumber - 1));
                                                            order.setState("In the kitchen");
                                                            System.out.println("Order started");
@@ -773,23 +800,40 @@ public class SocketMain {
 
                                                         switch (opcionInner) {
                                                             case 1:
-                                                                order.setState("Ready");
+                                                                if (order.getAddress() != null || order.getClient() != null){
+                                                                    // Order to deliver System.out.println(order.toStringDeliver());
+                                                                    order.setState("Ready to deliver");
+                                                                } else if (order.getPickUpTime() != null){
+                                                                    // Order to go
+                                                                    order.setState("Ready to pick up");
+                                                                } else {
+                                                                    // Order to eat in the restaurant
+                                                                    order.setState("Ready");
+                                                                }
+
                                                                 // Mark all the products as ready
                                                                 for (OrderProducts orderProducts : order.getOrder()) {
                                                                     orderProducts.setState(true);
                                                                 }
                                                                 // Mark the employee as available
-                                                                order.getEmployee().setState(true);
+                                                                order.getEmployee().setState(false);
                                                                 System.out.println("Order finished");
                                                                 break;
                                                             case 2:
                                                                 System.out.println("Products");
                                                                 int i = 0;
                                                                 for (OrderProducts orderProducts : order.getOrder()) {
+                                                                    if (orderProducts.getProduct().getPreparationTime() == 0){
+                                                                        orderProducts.setState(true);
+                                                                    }
                                                                     System.out.print(++i + ". ");
                                                                     System.out.print(orderProducts.getProduct().getName());
                                                                     System.out.print(" -> ");
                                                                     System.out.print(orderProducts.getProduct().getCategory());
+                                                                    if (orderProducts.getState()){
+                                                                        System.out.print(" -> ");
+                                                                        System.out.print("Ready");
+                                                                    }
                                                                     System.out.println(" ");
                                                                 }
                                                                 System.out.println("Select the product to mark as ready");
@@ -801,7 +845,6 @@ public class SocketMain {
                                                                     // Check if all the products are ready
                                                                     boolean allReady = true;
                                                                     for (OrderProducts orderProducts : order.getOrder()) {
-                                                                        // Mark products without time preparation as ready
                                                                         if (!orderProducts.getState()){
                                                                             allReady = false;
                                                                             break;
@@ -810,7 +853,7 @@ public class SocketMain {
                                                                     if (allReady){
                                                                         order.setState("Ready");
                                                                         // Mark the employee as available
-                                                                        order.getEmployee().setState(true);
+                                                                        order.getEmployee().setState(false);
                                                                         System.out.println("Order finished");
                                                                     }
                                                                 }catch (Exception e) {
@@ -845,6 +888,9 @@ public class SocketMain {
                                 }while (opcion != 4);
                                 break;
                             case 5:
+                                // Reports
+                                break;
+                            case 6:
                                 break;
                             default:
                                 System.out.println("Invalid option");
@@ -856,14 +902,13 @@ public class SocketMain {
                         System.out.println("Invalid option");
                         scanner.nextLine();
                     }
-                }while (opcion != 5);
+                }while (opcion != 6);
 
                 // EXPRESS SERVICE;
             }
         } catch (Exception e) {
             System.out.println("Warning");
         }
-
     }
     public static Address inputAddress() {
         Scanner scanner = new Scanner(System.in);
