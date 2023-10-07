@@ -5,6 +5,7 @@ import order.OrderProducts;
 import order.Orders;
 import person.Client;
 import person.Employee;
+import person.ExpressService;
 import person.aggregated.Address;
 
 
@@ -1092,6 +1093,8 @@ public class SocketMain {
                         // EXPRESS SERVICE;
                         break;
             case 3:
+                System.out.println("Welcome to Delivery System");
+                    ExpressServiceMain.showMenuExpress();
                 break;
             case 4:
                 System.out.println("Goodbye");
