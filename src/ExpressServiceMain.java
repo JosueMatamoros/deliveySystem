@@ -9,9 +9,14 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+/**
+ * The type Express service main.
+ */
 public class ExpressServiceMain {
+    /**
+     * The constant input.
+     */
     public static Scanner input = new Scanner(System.in);
-
     public static ArrayList<Orders> order = new ArrayList<>();
     static ArrayList<ExpressService> expressServicesEntities = new ArrayList<>();
 
@@ -19,6 +24,9 @@ public class ExpressServiceMain {
         expressServicesEntities.add(expressService);
     }
 
+    /**
+     * Show menu express.
+     */
     public static void showMenuExpress() {
         int option;
         do {
@@ -300,6 +308,11 @@ public class ExpressServiceMain {
         } while (option != 5) ;
     }
 
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
     public static void main(String[] args) {
 
         Product[] productos = {new Product("Coca-Cola", "Carbonated cola drink", 2.0, "Beverages", 0),
