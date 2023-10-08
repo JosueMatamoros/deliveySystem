@@ -1064,7 +1064,33 @@ public class SocketMain {
                                                     }
                                                     break;
                                                 case 2:
-                                                    // Incluir segundo reporte aqui
+                                                    // Show all the orders by delivery
+                                                    int contDelivery = 0;
+                                                    for (Orders order : orders) {
+                                                        if (order.getAddress() != null || order.getClient() != null){
+                                                            ++contDelivery;
+                                                        }
+                                                    }
+                                                    System.out.println("Total orders by delivery: " + contDelivery);
+                                                    int Glovo = 0;
+                                                    int UberEats = 0;
+                                                    for (Orders order : orders) {
+                                                        if (order.getAddress() != null || order.getClient() != null){
+                                                            if (order.getExpressService().getEntityName().equals("Glovo")){
+                                                                ++Glovo;
+                                                            } else if (order.getExpressService().getEntityName().equals("Uber eats")){
+                                                                ++UberEats;
+                                                            }
+                                                    }
+                                                    // Show the total the order in order
+                                                        if (Glovo > UberEats){
+                                                            System.out.println("Glovo: " + Glovo);
+                                                            System.out.println("Uber eats: " + UberEats);
+                                                        } else {
+                                                            System.out.println("Uber eats: " + UberEats);
+                                                            System.out.println("Glovo: " + Glovo);
+                                                        }
+                                                    }
                                                     break;
                                                 case 3:
                                                     System.out.println("Orders");
@@ -1108,6 +1134,7 @@ public class SocketMain {
                 Scanner input = new Scanner(System.in);
 
                 expressServicesEntities.add(new ExpressService("Luis Ernesto", "1232322", "Male", (byte) 18, "Uber eats", "20916252", "Motorcycle", "1652gh", "Black motorcycle"));
+                expressServicesEntities.add(new ExpressService("Antony Lopez", "2345675", "Male", (byte) 20, "Glovo", "209291892", "Car", "87628j", "Blue car"));
 
                 do {
                     System.out.println("Welcome to Express Service System");
@@ -1273,7 +1300,7 @@ public class SocketMain {
 
                             input.nextLine(); // Consume the newline character
 
-                            System.out.println("Choose the number of the order that you can pick up: ");
+                            System.out.println("Choose the number of the order :");
                             int numberOrder = input.nextInt();
                             input.nextLine(); // Consume the newline character
 
@@ -1303,6 +1330,7 @@ public class SocketMain {
                                         expressService.setState(true);
                                         selectedOrder.setState("Assigned to driver");
                                         System.out.println("The driver was assigned successfully ! Her is :" + expressService.getFullName() + " with the vehicle plate: " + expressService.getVehiculePlate() + " and the vehicle type: " + expressService.getVehiculeType());
+                                        selectedOrder.setExpressService(expressService);
                                         driverFound = true;
                                         break;
                                     }

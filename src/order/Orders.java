@@ -2,6 +2,7 @@ package order;
 
 import person.Client;
 import person.Employee;
+import person.ExpressService;
 import person.aggregated.Address;
 
 import java.io.Serializable;
@@ -26,6 +27,7 @@ public class Orders implements Serializable {
     private Address address;
     private Client client;
     private int orderNumber;
+    private ExpressService expressService;
 
     /**
      * The Order count.
@@ -161,6 +163,10 @@ public class Orders implements Serializable {
         return this.address;
     }
 
+    public ExpressService getExpressService(){
+        return this.expressService;
+    }
+
     /**
      * Get client client.
      *
@@ -214,6 +220,9 @@ public class Orders implements Serializable {
      */
     public void setTotal(int total){
         this.total = total;
+    }
+    public void setExpressService(ExpressService expressService){
+        this.expressService = expressService;
     }
 
     /**
