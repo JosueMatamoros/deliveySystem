@@ -1331,12 +1331,15 @@ public class SocketMain {
                             boolean exitMark = false;
                             int optionMark;
                             do {
+                                boolean ordersAssignedToDriver = false;
+
                                 System.out.println("The orders that are assigned to a driver are: ");
                                 for (Orders orderAssigned : orders) {
                                     if (orderAssigned.getState().equalsIgnoreCase("Assigned to driver")) {
+                                        ordersAssignedToDriver = true;
                                         System.out.println("1. Finish the order");
                                         System.out.println("2. Exit");
-                                        if(input.hasNextInt()) {
+                                        if (input.hasNextInt()) {
                                             optionMark = input.nextInt();
                                         } else {
                                             optionMark = 0;
@@ -1358,16 +1361,18 @@ public class SocketMain {
                                                 }
 
                                                 if (selectedOrderMark != null) {
-                                                    selectedOrderMark.setState("Ready"); // Assuming there is a 'setState' method in the 'Orders' class
+                                                    selectedOrderMark.setState("Ready");
                                                     System.out.println("The order was marked as delivered successfully!");
-                                                    // Update other state or perform actions as needed
                                                 } else {
                                                     System.out.println("The order doesn't exist, please try again!");
                                                 }
+                                                break;
+
                                             case 2:
-                                                System.out.println("You're going to exit of the mark as delivered option");
+                                                System.out.println("You're going to exit the mark as delivered option");
                                                 exitMark = true;
                                                 break;
+
                                             default:
                                                 System.out.println("Invalid option, please try again !");
                                                 break;
@@ -1375,9 +1380,16 @@ public class SocketMain {
                                     }
                                 }
 
-                            } while (!exitMark);
+                                if (!ordersAssignedToDriver) {
+                                    System.out.println("There are no orders assigned to a driver");
+                                    exitMark = true;
+                                }
 
+                            } while (!exitMark);
+                            break;
                         case 5:
+                            System.out.println("You're going to exit of the Express Service System");
+                            break;
                         default:
                             System.out.println("Invalid option, please try again !");
                             break;
