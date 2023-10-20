@@ -46,7 +46,7 @@ public class SocketClient {
      * @throws ClassNotFoundException the class not found exception
      */
     public static void sendInformation() throws IOException, InputMismatchException, ClassNotFoundException {
-        String serverIP = "127.0.0.1";
+        String serverIP = "10.30.1.137";
         int port = 12345;
 
         do try {

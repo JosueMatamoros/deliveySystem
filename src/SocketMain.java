@@ -234,17 +234,13 @@ public class SocketMain {
                                             int option = Integer.parseInt(clientResponse);
                                             switch (option) {
                                                 case 1:
-                                                    confirmation.println("The client chose to dine-in\n");
+                                                    confirmation.println("Your order will be served at moment");
                                                     Orders newOrder = new Orders(selectedProducts);
                                                     orders.add(newOrder);
-                                                    confirmation.println("List of orders:");
-                                                    for (Orders order : orders) {
-                                                        confirmation.println(order);
-                                                    }
                                                     finish = true;
                                                     break;
                                                 case 2:
-                                                    confirmation.println("The client chose takeout");
+                                                    confirmation.println("Your chose takeout");
                                                     confirmation.println("What time will you pick up your order (HH:mm:ss): ");
 
                                                     try {
@@ -257,11 +253,7 @@ public class SocketMain {
                                                         orders.add(newOrderPickup);
 
                                                         // THIS SHOULD NOT BE SHOWN ON THE CLIENT SIDE, IT SHOULD GO TO THE RESTAURANT;
-                                                        confirmation.println("List of orders:");
-                                                        for (Orders order : orders) {
-                                                            confirmation.println(order.toStringClient());
-                                                            System.out.println(order);
-                                                        }
+                                                        confirmation.println("Your order will be ready at: " + pickupTime + " and the order number is: " + newOrderPickup.getOrderNumber());
 
                                                     } catch (DateTimeParseException e) {
                                                         // Handle the exception if the time format is incorrect
@@ -276,18 +268,18 @@ public class SocketMain {
                                                     finish = true;
                                                     break;
                                                 case 3:
-                                                    confirmation.println("The client chose express service");
+                                                    confirmation.println("Your chose express service");
                                                     confirmation.println("Are you a frequent customer? (y/n) ");
                                                     String frequentCustomerResponse = inputBuffer.readLine();
 
                                                     if (frequentCustomerResponse.equalsIgnoreCase("y")) {
-                                                        confirmation.println("The client is a frequent customer");
+                                                        confirmation.println("Yes, you are a frequent customer");
                                                         confirmation.println("Enter your full name: ");
                                                         String fullName = inputBuffer.readLine();
 
                                                         Client clientOne = null;
                                                         if (searchClient(clientArrayList, fullName)) {
-                                                            confirmation.println("The client is a frequent customer");
+                                                            confirmation.println("You're in the costumer list");
                                                             for (Client client : clientArrayList) {
                                                                 if (client.getFullName().equalsIgnoreCase(fullName)) {
                                                                     clientOne = new Client(client.getFullName(), client.getPhone(), client.getGender(), client.getAge(), client.getAddresses());
@@ -309,7 +301,7 @@ public class SocketMain {
                                                             confirmation.println("You're not a frequent customer");
                                                         }
                                                     } else if (frequentCustomerResponse.equalsIgnoreCase("n")) {
-                                                        confirmation.println("The client is not a frequent customer");
+                                                        confirmation.println("You're not a frequent customer, please fill in the following information:");
 
                                                         confirmation.println("Enter your full name: ");
                                                         String fullName = inputBuffer.readLine();
@@ -340,27 +332,24 @@ public class SocketMain {
                                                         System.out.println("Full name client is: " + client.getFullName());
                                                         Orders newOrderExpress = new Orders(selectedProducts, null, client);
                                                         orders.add(newOrderExpress);
-                                                        confirmation.println("List of orders:");
-                                                        for (Orders order : orders) {
-                                                            confirmation.println(order.toString());
-                                                        }
+                                                        confirmation.println("Your order will be delivered to: " + address.getCompleteAddress() + " and the order number is: " + newOrderExpress.getOrderNumber());
                                                         finish = true;
                                                     } else {
-                                                        confirmation.println("The client sent an invalid response.");
+                                                        confirmation.println("You sent an invalid response.");
                                                         finish = false;
                                                     }
 
                                                     break;
                                                 case 4:
-                                                    confirmation.println("The client chose to exit");
+                                                    confirmation.println("You chose to exit");
                                                     break;
                                                 default:
-                                                    confirmation.println("The client chose an invalid option");
+                                                    confirmation.println("You chose an invalid option");
                                                     break;
                                             }
                                         } catch (NumberFormatException e) {
                                             // Handle the error if 'clientResponse' is not a valid number
-                                            confirmation.println("The client sent an invalid option.");
+                                            confirmation.println("You sent an invalid option.");
                                         }
                                     } else {
                                         // Handle the case where the response is empty or null
